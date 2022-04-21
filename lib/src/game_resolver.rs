@@ -26,10 +26,14 @@ impl GameResolverTrait for GameResolver {
             return vec![];
         }
 
-        // Start placing bigger pieces first
+        // Optimisation #1: Start placing bigger pieces first
         let mut sorted_pieces = game.pieces.clone();
         sorted_pieces.sort_by_key(|p| p.size());
         sorted_pieces.reverse();
+
+        // Optimisation #2: Reduce the results of the first call of resolve_board()
+        // We can remove the horizonal and vertical symmetries and divide the possible combinations by 4.
+        // TODO
 
         let mut solutions: Vec<DMatrix<u32>> = vec![board.clone()];
         for piece in sorted_pieces.iter() {
