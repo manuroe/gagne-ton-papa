@@ -16,7 +16,7 @@ pub struct GameResolver {
 
 impl GameResolverTrait for GameResolver {
     fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>>  {
-        let start = Instant::now();
+        //let start = Instant::now();   // Crash at runtime with wasm_bindgen 
 
         let rows = usize::try_from(game.rows()).unwrap();
         let columns = usize::try_from(game.columns).unwrap();
@@ -49,7 +49,7 @@ impl GameResolverTrait for GameResolver {
                 break;
             }
 
-            println!("- Found {} posible boards after {:.2?}", solutions.len(), start.elapsed());
+            println!("- Found {} posible boards after {:.2?}", solutions.len(), 0); //start.elapsed());
         }
         solutions
     }

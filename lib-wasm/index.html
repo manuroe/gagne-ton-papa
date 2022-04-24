@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>hello-wasm example</title>
+
+    <style>
+      .piece {
+        max-width: 40px;
+        padding: 10px;
+      }
+      .solution {
+        max-width: 200px;
+        padding: 10px;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <div id="pieces"></div>
+    <div id="solutions"></div>
+ifcon
+    <script type="module">
+
+      import init, * as gtpLib from "./pkg/lib_wasm.js";
+      init()
+        .then(() => {
+          //greet("WebAssembly")
+
+          let svgPieces = gtpLib.all_pieces_svg();
+          for (let svg of svgPieces) {
+            console.log(svg);
+            let blob = new Blob([svg], {type: 'image/svg+xml'});
+            let url = URL.createObjectURL(blob);
+            let image = document.createElement('img');
+            image.src = url;
+            image.addEventListener('load', () => URL.revokeObjectURL(url), {once: true});
+            image.className = "piece";
+
+            let svgContainer = document.getElementById("pieces");
+            svgContainer.appendChild(image);
+          }
+
+
+          let svgSolutions = gtpLib.resolve_in_svg();
+          for (let svg of svgSolutions) {
+            console.log(svg);
+            let blob = new Blob([svg], {type: 'image/svg+xml'});
+            let url = URL.createObjectURL(blob);
+            let image = document.createElement('img');
+            image.src = url;
+            image.addEventListener('load', () => URL.revokeObjectURL(url), {once: true});
+            image.className = "solution";
+
+            let svgContainer = document.getElementById("solutions");
+            svgContainer.appendChild(image);
+          }
+        });
+    </script>
+  </body>
+</html>
