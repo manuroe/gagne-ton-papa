@@ -64,15 +64,15 @@ impl PieceName {
             },
             Self::OrangeL5 => Piece { 
                 matrix: DMatrix::from_row_slice(4, 2,  &[1, 0, 1, 0, 1, 0, 1, 1]),
-                color: 0xEB700F
+                color: 0xE06000 // 0xEB700F
             },
             Self::BrownT5 => Piece { 
                 matrix: DMatrix::from_row_slice(4, 2,  &[0, 1, 1, 1, 0, 1, 0, 1]),
-                color: 0x571C11
+                color: 0x570C01 // 0x571C11
             },
             Self::VioletZigZag5 => Piece { 
                 matrix: DMatrix::from_row_slice(4, 2,  &[0, 1, 0, 1, 1, 1, 1, 0]),
-                color: 0xA36FAD
+                color: 0x036F0D // 0xA36FAD
             },
             Self::BlueL5 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 3,  &[1, 0, 0, 1, 0, 0, 1, 1, 1]),
@@ -80,15 +80,15 @@ impl PieceName {
             },
             Self::PinkNotSquare5 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 2,  &[0, 1, 1, 1, 1, 1]),
-                color: 0xE16BA4
+                color: 0xE00BA4 // 0xE16BA4
             },
             Self::YellowU5 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 2,  &[1, 1, 1, 0, 1, 1]),
-                color: 0xFEDA3C
+                color: 0xEECA2C // 0xFEDA3C
             },
             Self::BlueS5 => Piece {  
                 matrix: DMatrix::from_row_slice(3, 3,  &[0, 1, 1, 0, 1, 0, 1, 1, 0]),
-                color: 0x36B0EA
+                color: 0x26A0EA // 0x36B0EA
             },
         }
     }
