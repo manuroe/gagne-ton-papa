@@ -94,12 +94,11 @@ impl PieceName {
     }
 }
 
-impl Default for Game {
-    fn default() -> Game {
+impl Game {
+    pub fn game_with_all_pieces() -> Game {
         Game {
             columns: 5,
-            pieces: vec![],
-            all_pieces:vec![
+            pieces:vec![
                 PieceName::RedSquare1.piece(),
                 PieceName::RedSquare1.piece(),
                 PieceName::TanBar2.piece(),

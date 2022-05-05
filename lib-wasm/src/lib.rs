@@ -35,7 +35,7 @@ pub fn resolve_in_svg() -> js_sys::Array {
         // PieceName::VioletZigZag5.piece(),
         ];
 
-    let game = Game { pieces: pieces, ..Default::default() };
+    let game = Game { columns: 5, pieces: pieces };
     let resolver = GameResolver {};
 
 
@@ -49,12 +49,12 @@ pub fn resolve_in_svg() -> js_sys::Array {
 
 #[wasm_bindgen]
 pub fn all_pieces_svg() -> js_sys::Array {
-    let game = Game {..Default::default() };
+    let game = Game::game_with_all_pieces();
 
     println!("The env vars are as follows.");
 
 
-    game.all_pieces.iter()
+    game.pieces.iter()
         .map(|p| { svg_from_matrix(&(&p.matrix * p.color)) })
         .map(JsValue::from)
         .collect::<js_sys::Array>()

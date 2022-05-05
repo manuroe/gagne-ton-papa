@@ -22,7 +22,7 @@ fn main() {
         // PieceName::VioletZigZag5.piece(),
         ];
 
-    let game = Game { pieces: pieces, ..Default::default() };
+    let game = Game { columns: 5, pieces: pieces };
     print_pieces(&game.pieces);
 
     let resolver = GameResolver {};
