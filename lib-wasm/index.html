@@ -20,16 +20,17 @@
 
     <div id="pieces"></div>
     <div id="solutions"></div>
-ifcon
+
     <script type="module">
 
       import init, * as gtpLib from "./pkg/lib_wasm.js";
       init()
         .then(() => {
-          //greet("WebAssembly")
 
-          let svgPieces = gtpLib.all_pieces_svg();
-          for (let svg of svgPieces) {
+          let game = gtpLib.JSGame.sample_game();
+
+          for (let piece of game.pieces) {
+            let svg = piece.matrix.svg;
             console.log(svg);
             let blob = new Blob([svg], {type: 'image/svg+xml'});
             let url = URL.createObjectURL(blob);
@@ -43,8 +44,9 @@ ifcon
           }
 
 
-          let svgSolutions = gtpLib.resolve_in_svg();
-          for (let svg of svgSolutions) {
+          let solutions = game.resolve();
+          for (let matrix of solutions) {
+            let svg = matrix.svg;
             console.log(svg);
             let blob = new Blob([svg], {type: 'image/svg+xml'});
             let url = URL.createObjectURL(blob);

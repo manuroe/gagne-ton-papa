@@ -1,12 +1,12 @@
 Inspired from the Mozilla [tutorial](https://developer.mozilla.org/en-US/docs/WebAssembly/Rust_to_wasm).
 
-Build:
+## Build
 
 ```shell
 wasm-pack build --target web
 ```
 
-Sample:
+## Sample
 
 ```shell
 python3 -m http.server
