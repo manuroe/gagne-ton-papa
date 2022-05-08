@@ -62,6 +62,10 @@ impl JSGame {
         self.game.is_valid()
     }
 
+    pub fn missing_cells(&self) -> u32 {
+        self.game.missing_cells()
+    }
+
     pub fn piece(&self, id: usize) -> JSPiece {
         JSPiece::new(id, self.game.piece(id))
     }

@@ -8,7 +8,7 @@ pub struct Piece {
 }
 
 impl Piece {
-    pub fn size(&self) -> u32 {
+    pub fn cells(&self) -> u32 {
         self.matrix.iter().sum()
     }
 }
@@ -22,16 +22,26 @@ pub struct Game {
 
 impl Game {
     pub fn is_valid(&self) -> bool {
-        self.size() == self.rows() * self.columns 
+        self.cells() == self.rows() * self.columns 
             && self.pieces.len() > 1 
     }
 
     pub fn rows(&self) -> u32 {
-        self.size() / self.columns
+        self.cells() / self.columns
     }
 
-    pub fn size(&self) -> u32 {
-        return self.pieces.iter().map(|s| s.size()).sum()
+    // Total number of pieces celles
+    pub fn cells(&self) -> u32 {
+        self.pieces.iter().map(|s| s.cells()).sum()
+    }
+
+    // Number of missing cells to fill the game board
+    pub fn missing_cells(&self) -> u32 {
+        if self.is_valid() {
+            return 0;
+        }
+
+        (self.rows() + 1) * self.columns - self.cells()
     }
 
     pub fn piece_ids(&self) -> Vec<usize> {

@@ -10,7 +10,6 @@ pub trait GameResolverTrait {
     fn piece_variants(&self, piece: &Piece) -> Vec<Piece>;
 }
 
-
 pub struct GameResolver {
 }
 
@@ -28,7 +27,7 @@ impl GameResolverTrait for GameResolver {
 
         // Optimisation #1: Start placing bigger pieces first
         let mut sorted_pieces = game.pieces.clone();
-        sorted_pieces.sort_by_key(|p| p.size());
+        sorted_pieces.sort_by_key(|p| p.cells());
         sorted_pieces.reverse();
 
         // Optimisation #2: Reduce the results of the first call of resolve_board()
@@ -66,17 +65,26 @@ impl GameResolverTrait for GameResolver {
 
 
 impl GameResolver {
+
+    /// Find all possible boards where the piece fits in the passed board.
+    /// 
+    /// The algorithm is the following:
+    /// - Turn the piece into all the boards where it fits alone
+    /// - Keep only boards that do not intersect with the passed board by
+    ///     - Replacing all non null values by 1 in both matrixes
+    ///     - Summing them
+    ///     - If the max value in the matrix result is 1. There is no collision
+    ///  - Merge the passed board and the found boards
     fn resolve_board(&self, board: &DMatrix::<u32>, piece: &Piece) -> Vec<DMatrix<u32>> {
         let mut solutions: Vec<DMatrix<u32>> = vec![];
 
-        let board_maxed = matrix_tools::max_matrix(&board, 1);
-
+        let normalised_board = matrix_tools::max_matrix(&board, 1);
 
         for piece_board in  self.boards_with_piece(piece, board) {
-            let piece_board_maxed = matrix_tools::max_matrix(&piece_board, 1);
-            let merged_board_maxed = board_maxed.clone() + piece_board_maxed;
+            let normalised_piece = matrix_tools::max_matrix(&piece_board, 1);
+            let normalised_merged_board = normalised_board.clone() + normalised_piece;
 
-            if merged_board_maxed.max() == 1 {
+            if normalised_merged_board.max() == 1 {
                 let merged_board = board + piece_board.clone();
                 solutions.push(merged_board);
             }
@@ -85,7 +93,7 @@ impl GameResolver {
         solutions
     }
 
-    // Return all boards when the piece can fit
+    // Return all boards where the piece can fit
     fn boards_with_piece(&self, piece: &Piece, board: &DMatrix::<u32>) -> Vec<DMatrix<u32>> {
         if piece.matrix.nrows() > board.nrows() {
             return Vec::new();
