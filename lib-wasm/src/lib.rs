@@ -1,18 +1,11 @@
 pub mod js_models;
 
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsCast;
-use js_sys;
-
-use nalgebra::DMatrix;
 
 use gtp_lib::models::*;
 use gtp_lib::game_data::*;
-use gtp_lib::game_resolver::*;
-use gtp_lib::svg_renderer::*;
 
 use js_models::*;
-
 
 #[wasm_bindgen]
 impl JSGame {
