@@ -9,5 +9,5 @@ edition = "2021"
 
 [dependencies]
 gtp-lib = { path = "lib" }
-nalgebra = "*"
-colored = "*"
+nalgebra = "0.31.0"
+colored = "2.0.0"
