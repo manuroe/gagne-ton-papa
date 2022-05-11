@@ -1,5 +1,6 @@
 {
   "name": "web",
+  "homepage": "/gagne-ton-papa",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
