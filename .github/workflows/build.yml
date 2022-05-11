@@ -1,0 +1,50 @@
+on: [pull_request]
+
+name: Rust lib build
+
+jobs:
+  build_lib:
+    name: Build lib
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+
+  build_lib_bindgen:
+    name: Build lib-wasm 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - working-directory: ./lib-wasm
+        run: wasm-pack build --target web
+
+  build_web:
+    name: Build web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build lib-wasm
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - working-directory: ./lib-wasm
+        run: wasm-pack build --target web
+
+      - run: npm ci
+      # - run: npm test
+      - run: npm run build

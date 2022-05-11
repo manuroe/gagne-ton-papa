@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import * as gtpLib from 'lib-wasm';
@@ -120,6 +119,8 @@ export default class App extends React.Component<AppProps, AppState> {
               <span key={piece.id} onClick={() => this.setPieceSelected(piece.id, false)}>
                 <PieceView piece={piece}></PieceView>
               </span>)
+          } else {
+            return (<span></span>)
           }
         })}
       </div>
