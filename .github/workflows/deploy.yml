@@ -5,7 +5,11 @@ on:
       - main
 jobs:
   deploy:
+    name: Deploy web
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web
     strategy:
       matrix:
         node-version: [12.x]
@@ -23,7 +27,7 @@ jobs:
         run: wasm-pack build --target web
 
       - name: Install Packages
-        run: npm install
+        run: npm ci
 
       - name: Build page
         run: npm run build
