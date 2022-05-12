@@ -109,7 +109,11 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   renderSelectedPieces = () => {
-    let isGameValid = this.state.isGameValid && this.state.selectedPieceIds.size;
+    if (!this.state.selectedPieceIds.size) {
+      return (<div></div>);
+    }
+
+    let isGameValid = this.state.isGameValid;
 
     return (
       <div id='selected-pieces-area' className={isGameValid ? "valid-game" : ""}>
@@ -167,9 +171,15 @@ export default class App extends React.Component<AppProps, AppState> {
           Solutions pour <a className='App-link' href='https://www.gigamic.com/jeu/gagne-ton-papa' target="_blank" rel="noopener noreferrer"> GAGNE TON PAPA!</a>
         </header>
 
-        {this.renderAllPieces()}
-        {this.renderSelectedPieces()}
-        {this.renderSolutions()}
+        <div className="App-body">
+          {this.renderAllPieces()}
+          {this.renderSelectedPieces()}
+          {this.renderSolutions()}
+        </div>
+
+        <footer className="App-footer">
+          <a href="https://github.com/manuroe/gagne-ton-papa">GitHub</a>
+        </footer>
       </div>
     );
   }
