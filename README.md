@@ -10,6 +10,6 @@ The web app is live here: https://manuroe.github.io/gagne-ton-papa/.
 
 The repository is organised as the following (this is also the technical stack):
  - [lib](./lib): the core rust library
- - [src](.src): a sample rust terminal app to play with the lib in Rust
- - [lib-wasm](.lib-wasm): wasm bindings using [wasm_bindgen](https://rustwasm.github.io/docs/wasm-bindgen/)
+ - [src](./src): a sample rust terminal app to play with the lib in Rust
+ - [lib-wasm](./lib-wasm): wasm bindings using [wasm_bindgen](https://rustwasm.github.io/docs/wasm-bindgen/)
  - [web](./web): the web front-end based on react and typescript
