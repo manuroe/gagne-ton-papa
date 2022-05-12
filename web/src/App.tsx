@@ -109,7 +109,11 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   renderSelectedPieces = () => {
-    let isGameValid = this.state.isGameValid && this.state.selectedPieceIds.size;
+    if (!this.state.selectedPieceIds.size) {
+      return (<div></div>);
+    }
+
+    let isGameValid = this.state.isGameValid;
 
     return (
       <div id='selected-pieces-area' className={isGameValid ? "valid-game" : ""}>
