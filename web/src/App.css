@@ -13,6 +13,22 @@
   color: white;
 }
 
+.App-body {
+  min-height: calc(90vh - 20px);
+}
+
+.App-footer {
+  height: 20px;
+  background-color: #282c34;
+  color: white;
+  text-align: right;
+}
+
+.App-footer a {
+  color: white;
+  text-decoration: none;
+}
+
 .App-link {
   color: orange;
 }
