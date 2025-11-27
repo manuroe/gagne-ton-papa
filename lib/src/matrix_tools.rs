@@ -48,3 +48,54 @@ pub fn rotate_matrix(matrix: &DMatrix<u32>) -> DMatrix<u32> {
 pub fn max_matrix(matrix: &DMatrix<u32>, max_val: u32) -> DMatrix<u32> {
     matrix.slice((0, 0), (matrix.nrows(), matrix.ncols())).map(|val| cmp::min(val, max_val))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_rotate_matrix() {
+        let matrix = DMatrix::from_row_slice(2, 2, &[1, 2, 3, 4]);
+        let rotated = rotate_matrix(&matrix);
+        // Original:
+        // 1 2
+        // 3 4
+        // Rotated 90 deg clockwise:
+        // 3 1
+        // 4 2
+        assert_eq!(rotated, DMatrix::from_row_slice(2, 2, &[3, 1, 4, 2]));
+    }
+
+    #[test]
+    fn test_rotation_variants() {
+        // L-shape
+        // 1 0
+        // 1 1
+        let matrix = DMatrix::from_row_slice(2, 2, &[1, 0, 1, 1]);
+        let variants = rotation_variants(&matrix);
+        // L-shape has 8 variants (4 rotations * 2 reflections), all unique?
+        // Let's check a simpler one.
+        // Square:
+        // 1 1
+        // 1 1
+        // Should have 1 variant.
+        let square = DMatrix::from_row_slice(2, 2, &[1, 1, 1, 1]);
+        let square_variants = rotation_variants(&square);
+        assert_eq!(square_variants.len(), 1);
+
+        // Rectangle:
+        // 1 1
+        // Should have 2 variants (horizontal and vertical).
+        let rect = DMatrix::from_row_slice(1, 2, &[1, 1]);
+        let rect_variants = rotation_variants(&rect);
+        assert_eq!(rect_variants.len(), 2);
+    }
+
+    #[test]
+    fn test_max_matrix() {
+        let matrix = DMatrix::from_row_slice(2, 2, &[1, 5, 10, 0]);
+        let max_val = 5;
+        let clamped = max_matrix(&matrix, max_val);
+        assert_eq!(clamped, DMatrix::from_row_slice(2, 2, &[1, 5, 5, 0]));
+    }
+}

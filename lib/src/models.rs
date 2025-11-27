@@ -96,3 +96,76 @@ impl Game {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nalgebra::DMatrix;
+
+    fn create_piece(rows: usize, cols: usize, values: Vec<u32>) -> Piece {
+        Piece {
+            matrix: DMatrix::from_row_slice(rows, cols, &values),
+            color: 0,
+        }
+    }
+
+    #[test]
+    fn test_piece_cells() {
+        let piece = create_piece(2, 2, vec![1, 0, 1, 1]);
+        assert_eq!(piece.cells(), 3);
+    }
+
+    #[test]
+    fn test_game_is_valid() {
+        let p1 = create_piece(1, 2, vec![1, 1]);
+        let p2 = create_piece(1, 2, vec![1, 1]);
+        let game = Game {
+            columns: 2,
+            pieces: vec![p1, p2],
+        };
+        assert!(game.is_valid());
+        assert_eq!(game.rows(), 2);
+        assert_eq!(game.cells(), 4);
+        assert_eq!(game.missing_cells(), 0);
+    }
+
+    #[test]
+    fn test_game_invalid() {
+        let p1 = create_piece(1, 2, vec![1, 1]);
+        let game = Game {
+            columns: 2,
+            pieces: vec![p1],
+        };
+        assert!(!game.is_valid());
+    }
+
+    #[test]
+    fn test_game_missing_cells() {
+        let p1 = create_piece(1, 2, vec![1, 1]);
+        let p2 = create_piece(1, 1, vec![1]);
+        let game = Game {
+            columns: 2,
+            pieces: vec![p1, p2],
+        };
+        // Total cells: 3. Columns: 2. Rows needed: 3/2 = 1.
+        // But 3 cells don't fill 1*2=2 or 2*2=4.
+        // rows() returns 1.
+        // missing_cells logic: (rows + 1) * columns - cells
+        // (1 + 1) * 2 - 3 = 4 - 3 = 1.
+        assert_eq!(game.missing_cells(), 1);
+    }
+
+    #[test]
+    fn test_game_from_game() {
+        let p1 = create_piece(1, 1, vec![1]);
+        let p2 = create_piece(1, 1, vec![1]);
+        let game = Game {
+            columns: 2,
+            pieces: vec![p1.clone(), p2.clone()],
+        };
+        
+        let sub_game = Game::game_from_game(&game, vec![0]);
+        assert_eq!(sub_game.pieces.len(), 1);
+        assert_eq!(sub_game.pieces[0].cells(), 1);
+    }
+}

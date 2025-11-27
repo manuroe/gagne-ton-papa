@@ -105,7 +105,7 @@ impl GameResolver {
     /// 2. Adding vertical positions (top to bottom)
     /// 3. Padding to match board dimensions
     fn boards_with_piece(piece: &Piece, board: &DMatrix<u32>) -> Vec<DMatrix<u32>> {
-        if piece.matrix.nrows() > board.nrows() {
+        if piece.matrix.nrows() > board.nrows() || piece.matrix.ncols() > board.ncols() {
             return Vec::new();
         }
 
@@ -139,5 +139,61 @@ impl GameResolver {
             .iter()
             .map(|m| m.clone().resize(board.nrows(), board.ncols(), 0))
             .collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::models::{Game, Piece};
+    use nalgebra::DMatrix;
+
+    fn create_piece(rows: usize, cols: usize, values: Vec<u32>) -> Piece {
+        Piece {
+            matrix: DMatrix::from_row_slice(rows, cols, &values),
+            color: 1,
+        }
+    }
+
+    #[test]
+    fn test_resolve_simple_game() {
+        // 2x2 board
+        // Piece 1: 1x2 [1, 1]
+        // Piece 2: 1x2 [1, 1]
+        // Should have solutions.
+        let p1 = create_piece(1, 2, vec![1, 1]);
+        let p2 = create_piece(1, 2, vec![1, 1]);
+        let game = Game {
+            columns: 2,
+            pieces: vec![p1, p2],
+        };
+
+        let resolver = GameResolver;
+        let solutions = resolver.resolve(&game);
+        assert!(!solutions.is_empty());
+        
+        // Check that the solution is valid (filled with non-zero)
+        let solution = &solutions[0];
+        assert_eq!(solution.nrows(), 2);
+        assert_eq!(solution.ncols(), 2);
+        assert!(solution.iter().all(|&x| x > 0));
+    }
+
+    #[test]
+    fn test_resolve_impossible_game() {
+        // 2x2 board
+        // Piece 1: 3x1 [1, 1, 1] - too tall
+        // Piece 2: 1x1 [1]
+        // Total cells 4, but piece 1 doesn't fit in 2x2.
+        let p1 = create_piece(3, 1, vec![1, 1, 1]);
+        let p2 = create_piece(1, 1, vec![1]);
+        let game = Game {
+            columns: 2,
+            pieces: vec![p1, p2],
+        };
+
+        let resolver = GameResolver;
+        let solutions = resolver.resolve(&game);
+        assert!(solutions.is_empty());
     }
 }
