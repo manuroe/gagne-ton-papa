@@ -7,19 +7,19 @@ use crate::models::{Game, Piece};
 const COLOR_RED: u32 = 0x00DA_0022;
 const COLOR_TAN: u32 = 0x00F1_955A;
 const COLOR_BROWN: u32 = 0x0057_1C11;
-const COLOR_BROWN_DARK: u32 = 0x0057_0C01;
+const COLOR_BROWN_DARK: u32 = 0x0057_0C01; // Original: 0x571C11 (changed for terminal UI)
 const COLOR_ORANGE: u32 = 0x00EB_700F;
-const COLOR_ORANGE_DARK: u32 = 0x00E0_6000;
+const COLOR_ORANGE_DARK: u32 = 0x00E0_6000; // Original: 0xEB700F (changed for terminal UI)
 const COLOR_PINK: u32 = 0x00E1_6BA4;
-const COLOR_PINK_DARK: u32 = 0x00E0_0BA4;
+const COLOR_PINK_DARK: u32 = 0x00E0_0BA4; // Original: 0xE16BA4 (changed for terminal UI)
 const COLOR_GREEN: u32 = 0x008D_C69E;
 const COLOR_BLUE: u32 = 0x0036_B0EA;
 const COLOR_BLUE_DARK: u32 = 0x0006_3679;
-const COLOR_BLUE_LIGHT: u32 = 0x0026_A0EA;
+const COLOR_BLUE_LIGHT: u32 = 0x0026_A0EA; // Original: 0x36B0EA (changed for terminal UI)
 const COLOR_YELLOW: u32 = 0x00FE_DA3C;
-const COLOR_YELLOW_DARK: u32 = 0x00EE_CA2C;
+const COLOR_YELLOW_DARK: u32 = 0x00EE_CA2C; // Original: 0xFEDA3C (changed for terminal UI)
 const COLOR_VIOLET: u32 = 0x00A3_6FAD;
-const COLOR_VIOLET_GREEN: u32 = 0x0003_6F0D;
+const COLOR_VIOLET_GREEN: u32 = 0x0003_6F0D; // Original: 0xA36FAD (changed for terminal UI)
 
 /// Represents the different piece types in the "Gagne Ton Papa" game.
 ///
