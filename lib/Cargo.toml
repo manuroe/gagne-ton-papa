@@ -8,3 +8,8 @@ edition = "2021"
 [dependencies]
 nalgebra = "0.31.0"
 svg = "0.10.0"
+
+[lints.clippy]
+all = "warn"
+pedantic = "warn"
+nursery = "warn"

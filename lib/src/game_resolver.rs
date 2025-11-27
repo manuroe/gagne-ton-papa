@@ -1,86 +1,91 @@
 
-use nalgebra::{DMatrix};
-//use std::time::Instant;
+use nalgebra::DMatrix;
 
-use crate::models::*;
+use crate::models::{Game, Piece};
 use crate::matrix_tools;
 
+/// Trait for game puzzle solvers.
+///
+/// Implementors of this trait can solve puzzle games by finding all valid
+/// arrangements of pieces on a game board.
 pub trait GameResolverTrait {
+    /// Finds all valid solutions for the given game.
     fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>>;
+    
+    /// Generates all unique variants (rotations and reflections) of a piece.
     fn piece_variants(&self, piece: &Piece) -> Vec<Piece>;
 }
 
-pub struct GameResolver {
-}
+/// A solver for the "Gagne Ton Papa" puzzle game.
+///
+/// This solver uses a backtracking algorithm to find all possible ways
+/// to arrange the given pieces on the game board.
+pub struct GameResolver;
 
 impl GameResolverTrait for GameResolver {
-    fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>>  {
-        //let start = Instant::now();   // Crash at runtime with wasm_bindgen 
-
-        let rows = usize::try_from(game.rows()).unwrap();
-        let columns = usize::try_from(game.columns).unwrap();
+    fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>> {
+        let rows = usize::try_from(game.rows()).expect("Row count too large");
+        let columns = usize::try_from(game.columns).expect("Column count too large");
         let board = DMatrix::<u32>::zeros(rows, columns);
 
         if !game.is_valid() {
             return vec![];
         }
 
-        // Optimisation #1: Start placing bigger pieces first
-        let mut sorted_pieces = game.pieces.clone();
-        sorted_pieces.sort_by_key(|p| p.cells());
-        sorted_pieces.reverse();
+        // Optimization: Start placing bigger pieces first to prune the search space earlier
+        let mut piece_indices: Vec<_> = (0..game.pieces.len()).collect();
+        piece_indices.sort_by_key(|&i| std::cmp::Reverse(game.pieces[i].cells()));
 
-        // Optimisation #2: Reduce the results of the first call of resolve_board()
-        // We can remove the horizonal and vertical symmetries and divide the possible combinations by 4.
-        // TODO
-
-        let mut solutions: Vec<DMatrix<u32>> = vec![board.clone()];
-        for piece in sorted_pieces.iter() {
+        let mut solutions: Vec<DMatrix<u32>> = vec![board];
+        for &piece_idx in &piece_indices {
+            let piece = &game.pieces[piece_idx];
             let mut next_solutions: Vec<DMatrix<u32>> = vec![];
+            
             for variant in self.piece_variants(piece) {
                 for solution in &solutions {
-                    next_solutions.extend(self.resolve_board(&solution, &variant));
+                    next_solutions.extend(Self::resolve_board(solution, &variant));
                 }
             }
 
             solutions = next_solutions;
-            if solutions.len() == 0 {
+            if solutions.is_empty() {
                 break;
             }
 
-            println!("- Found {} posible boards after {:.2?}", solutions.len(), 0); //start.elapsed());
+            #[cfg(debug_assertions)]
+            println!("- Found {} possible boards for piece {}", solutions.len(), piece_idx);
         }
         solutions
     }
 
     fn piece_variants(&self, piece: &Piece) -> Vec<Piece> {
-        matrix_tools::rotation_variants(&piece.matrix).iter().map( |matrix|
-            Piece{
+        matrix_tools::rotation_variants(&piece.matrix)
+            .iter()
+            .map(|matrix| Piece {
                 color: piece.color,
                 matrix: matrix.clone()
-            }
-        ).collect()
+            })
+            .collect()
     }
 }
 
 
 impl GameResolver {
-
-    /// Find all possible boards where the piece fits in the passed board.
+    /// Finds all possible boards where the piece fits in the passed board.
     /// 
-    /// The algorithm is the following:
-    /// - Turn the piece into all the boards where it fits alone
-    /// - Keep only boards that do not intersect with the passed board by
-    ///     - Replacing all non null values by 1 in both matrixes
-    ///     - Summing them
-    ///     - If the max value in the matrix result is 1. There is no collision
-    ///  - Merge the passed board and the found boards
-    fn resolve_board(&self, board: &DMatrix::<u32>, piece: &Piece) -> Vec<DMatrix<u32>> {
+    /// The algorithm:
+    /// 1. Generate all possible positions for the piece on the board
+    /// 2. Filter out positions that collide with existing pieces
+    /// 3. Merge valid positions with the current board state
+    ///
+    /// Collision detection works by normalizing both matrices to binary (0/1),
+    /// adding them, and checking if any cell has a value > 1.
+    fn resolve_board(board: &DMatrix<u32>, piece: &Piece) -> Vec<DMatrix<u32>> {
         let mut solutions: Vec<DMatrix<u32>> = vec![];
 
-        let normalised_board = matrix_tools::max_matrix(&board, 1);
+        let normalised_board = matrix_tools::max_matrix(board, 1);
 
-        for piece_board in  self.boards_with_piece(piece, board) {
+        for piece_board in Self::boards_with_piece(piece, board) {
             let normalised_piece = matrix_tools::max_matrix(&piece_board, 1);
             let normalised_merged_board = normalised_board.clone() + normalised_piece;
 
@@ -93,23 +98,31 @@ impl GameResolver {
         solutions
     }
 
-    // Return all boards where the piece can fit
-    fn boards_with_piece(&self, piece: &Piece, board: &DMatrix::<u32>) -> Vec<DMatrix<u32>> {
+    /// Returns all boards where the piece can fit.
+    ///
+    /// Generates all possible positions for a piece on a board by:
+    /// 1. Creating horizontal positions (left to right)
+    /// 2. Adding vertical positions (top to bottom)
+    /// 3. Padding to match board dimensions
+    fn boards_with_piece(piece: &Piece, board: &DMatrix<u32>) -> Vec<DMatrix<u32>> {
         if piece.matrix.nrows() > board.nrows() {
             return Vec::new();
         }
 
-        let horizontal_position_count: u32 = (board.ncols() - piece.matrix.ncols() + 1).try_into().unwrap();
+        let horizontal_position_count: u32 = (board.ncols() - piece.matrix.ncols() + 1)
+            .try_into()
+            .expect("Position count too large");
 
-        // Find all posible horizontal positions (the piece is at the top)
-        let range: Vec<u32> = (0..horizontal_position_count).collect();
-        let mut horizontal_positions: Vec<DMatrix<u32>> = range.into_iter().map(|pos| {
-            piece.matrix.clone().insert_columns(0, pos.try_into().unwrap(), 0) * piece.color
-        }).collect();
+        // Find all possible horizontal positions (piece at the top)
+        let mut horizontal_positions: Vec<DMatrix<u32>> = (0..horizontal_position_count)
+            .map(|pos| {
+                piece.matrix.clone().insert_columns(0, pos.try_into().unwrap(), 0) * piece.color
+            })
+            .collect();
 
-        // Add empty rows at the top 
+        // Add empty rows at the top
         let mut more_horizontal_positions: Vec<DMatrix<u32>> = Vec::new();
-        for position in horizontal_positions.iter() {
+        for position in &horizontal_positions {
             if board.nrows() < position.nrows() {
                 continue;
             }
@@ -122,11 +135,9 @@ impl GameResolver {
         horizontal_positions.extend(more_horizontal_positions);
 
         // Add empty rows at the bottom if needed
-        let horizontal_positions = horizontal_positions.iter().map(|m| {
-            m.clone().resize(board.nrows(), board.ncols(), 0)
-        }).collect();
-        
         horizontal_positions
+            .iter()
+            .map(|m| m.clone().resize(board.nrows(), board.ncols(), 0))
+            .collect()
     }
-
 }

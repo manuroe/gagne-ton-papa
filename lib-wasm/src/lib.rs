@@ -17,17 +17,12 @@ impl JSGame {
             PieceName::BrownL3.piece(),
             PieceName::YellowZigZag4.piece(),
             PieceName::BlueT4.piece(),
-    
             PieceName::BlueS5.piece(),
-            //PieceName::PinkNotSquare5.piece(),
-    
             PieceName::OrangeL5.piece(),
-            // PieceName::BrownT5.piece(),
-            // PieceName::VioletZigZag5.piece(),
-            ];
+        ];
 
         Self {
-            game: Game { columns: 5, pieces: pieces }
+            game: Game { columns: 5, pieces }
         }
     }
 }
