@@ -41,7 +41,7 @@ pub struct JSPiece {
 impl JSPiece {
     pub fn new(id: usize, piece: &Piece) -> Self {
         Self {
-            id: id,
+            id,
             matrix: JSMatrix::new(&(piece.matrix.clone() * piece.color)),
             color: piece.color,
         }
@@ -67,13 +67,17 @@ impl JSGame {
     }
 
     pub fn piece(&self, id: usize) -> JSPiece {
-        JSPiece::new(id, self.game.piece(id))
+        let piece = self.game.piece(id).expect("Invalid piece ID");
+        JSPiece::new(id, piece)
     }
 
     #[wasm_bindgen(getter)]
     pub fn pieces(&self) -> JSPieceArray {
         self.game.piece_ids().into_iter()
-        .map(|id| JSPiece::new(id, &(self.game.piece(id))))
+        .map(|id| {
+            let piece = self.game.piece(id).expect("Invalid piece ID");
+            JSPiece::new(id, piece)
+        })
         .map(JsValue::from)
         .collect::<js_sys::Array>()
         .unchecked_into::<JSPieceArray>()
