@@ -1,77 +1,298 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  --cell-size: 30px;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 10vh;
+  background-color: var(--primary-color);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-body {
-  min-height: calc(90vh - 20px);
-}
-
-.App-footer {
-  height: 20px;
-  background-color: #282c34;
-  color: white;
-  text-align: right;
-}
-
-.App-footer a {
-  color: white;
-  text-decoration: none;
+  font-size: calc(20px + 2vmin);
+  color: var(--text-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin-bottom: 20px;
 }
 
 .App-link {
-  color: orange;
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: bold;
 }
 
+.App-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.App-footer {
+  padding: 10px;
+  background-color: var(--text-color);
+  color: white;
+  text-align: center;
+  margin-top: auto;
+}
+
+.App-footer a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+/* Sections */
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: var(--text-color);
+  font-weight: 600;
+  width: 100%;
+  text-align: left;
+  padding-left: 10px;
+}
+
+/* All Pieces Area */
 #all-pieces-area {
-  max-width: 520px;
-  border: 1px solid;
-  margin: 20px;
-  margin-inline: auto;
-}
-.piece {
-  margin: 10px;
-}
-.selected-piece {
-  opacity: 0.3;
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
-#selected-pieces-area {
-  width: 260px;
-  min-height: 90px;
-  border: 2px solid;
+.piece-container {
+  display: inline-block;
+  transition: transform 0.2s, opacity 0.2s;
+  cursor: pointer;
+  padding: 5px;
   border-radius: 10px;
-  margin: 10px;
-  margin-inline: auto;
 }
+
+.piece-container:hover {
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.piece-container:active {
+  transform: scale(0.95);
+}
+
+.selected-piece {
+  opacity: 0.2;
+  /* Faded more as requested */
+  transform: scale(0.85);
+  filter: grayscale(100%);
+  /* Make it black and white to clearly show it's "used" */
+}
+
+/* Selected Pieces Area */
+#selected-pieces-area {
+  background-color: var(--card-bg);
+  border: 3px dashed var(--accent-color);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  min-height: 100px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
 .valid-game {
-  border-color: green !important;
+  border-color: #2ecc71 !important;
+  /* Green */
+  border-style: solid !important;
+  background-color: rgba(46, 204, 113, 0.1) !important;
 }
 
-
+/* Solutions Area */
 #solutions-area {
-  margin: 20px;
-  margin-inline: auto;
-  max-width: 1000px;  /* 4 solutions per line = 4 variants of a 1 solution when counding horizontal and vertical symetries */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.solution {
-  max-width: 200px;
-  margin: 10px;
+
+.solution-count {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: var(--secondary-color);
+  font-weight: bold;
+}
+
+.solutions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.solution-card {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.solution-card:hover {
+  transform: translateY(-5px);
 }
 
 .text-left {
   text-align: left;
-  margin-left: 4px;
-  margin-top: 3px;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .App {
+    --cell-size: 22px;
+  }
+
+  .App-header {
+    font-size: 1.2rem;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .App-body {
+    padding: 5px;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    padding-left: 5px;
+  }
+
+  #all-pieces-area {
+    padding: 10px;
+    gap: 5px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+
+  .piece-container {
+    padding: 2px;
+    border-radius: 5px;
+  }
+
+  #selected-pieces-area {
+    padding: 10px;
+    min-height: 60px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border-width: 2px;
+  }
+
+  .solution-count {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .solutions-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+  }
+}
+
+.piece-image {
+  display: block;
+  height: auto;
+  /* Calculate width based on the number of cells (passed via inline style) and the current cell size */
+  width: calc(var(--piece-width) * var(--cell-size));
+  /* Border for better visibility */
+  filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.5));
+}
+
+.solution-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  /* Border for better visibility */
+  filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.5));
+}
+
+/* Reset Button */
+.reset-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.reset-button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.reset-button:hover {
+  background-color: #c0392b;
+  /* Slightly darker red */
+  transform: translateY(-2px);
+}
+
+.reset-button:active {
+  transform: translateY(0);
+}
+
+/* Spinner */
+.spinner {
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--accent-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

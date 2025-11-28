@@ -12,7 +12,7 @@ init().then(() => {
   );
   root.render(
     <React.StrictMode>
-      <App allPiecesGame={gtpLib.JSGame.game_with_all_pieces()}/>
+      <App allPiecesGame={gtpLib.JSGame.game_with_all_pieces()} />
     </React.StrictMode>
   );
 });

@@ -11,6 +11,8 @@ export default class PieceView extends React.Component<Props, {}> {
   render() {
     const svg = new Blob([this.props.piece.matrix.svg], { type: "image/svg+xml" });
     const url = URL.createObjectURL(svg);
-    return <img src={url} className="piece" style={{ maxWidth: 20 * this.props.piece.matrix.width }} alt=''/>
+    // Pass the width in "cells" to CSS via a custom property
+    const style = { "--piece-width": this.props.piece.matrix.width } as React.CSSProperties;
+    return <img src={url} className="piece-image" style={style} alt='' />
   }
 }

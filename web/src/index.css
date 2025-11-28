@@ -1,13 +1,33 @@
+:root {
+  --primary-color: #FFD700;
+  /* Gold/Yellow */
+  --secondary-color: #FF6B6B;
+  /* Soft Red */
+  --accent-color: #4ECDC4;
+  /* Teal */
+  --bg-color: #F7F9FC;
+  /* Light Blue-ish Grey */
+  --text-color: #2C3E50;
+  /* Dark Blue Grey */
+  --card-bg: #FFFFFF;
+  --font-main: 'Fredoka', sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+button {
+  font-family: var(--font-main);
+  cursor: pointer;
 }
