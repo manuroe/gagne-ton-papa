@@ -90,6 +90,8 @@ export default class App extends React.Component<AppProps, AppState> {
       solutions: undefined
     });
 
+    const MIN_SEARCH_DISPLAY_MS = 1000;
+
     if (isGameValid) {
       this.setState({
         searching: true
@@ -102,7 +104,7 @@ export default class App extends React.Component<AppProps, AppState> {
             searching: false,
             solutions: solutions
           });
-        }, 1000);
+        }, MIN_SEARCH_DISPLAY_MS);
       });
     }
     else {
