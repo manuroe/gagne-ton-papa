@@ -13,6 +13,7 @@ type AppProps = {
 type AppState = {
   allPieces: gtpLib.JSPiece[],
   selectedPieceIds: Set<number>,
+  closingPieceIds: Set<number>, // Track pieces currently animating out
   isGameValid: boolean,
   missingCells: number,
   searching: boolean,
@@ -23,31 +24,52 @@ export default class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.setPieceSelected = this.setPieceSelected.bind(this);
+    this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
   }
 
   state: AppState = {
     allPieces: this.props.allPiecesGame.pieces,
     selectedPieceIds: new Set<number>(),
+    closingPieceIds: new Set<number>(),
     isGameValid: false,
     missingCells: 0,
     searching: false,
   };
 
   setPieceSelected(pieceId: number, selected: boolean) {
-    let selectedPieceIds = this.state.selectedPieceIds;
     if (selected) {
+      // Selecting: Add immediately
+      let selectedPieceIds = this.state.selectedPieceIds;
       selectedPieceIds.add(pieceId);
-    } else {
-      selectedPieceIds.delete(pieceId);
-    }
+      // Ensure it's not in closing list (in case of rapid toggling)
+      let closingPieceIds = this.state.closingPieceIds;
+      closingPieceIds.delete(pieceId);
 
-    this.setSelectedPieceIds(selectedPieceIds);
+      this.setSelectedPieceIds(selectedPieceIds, closingPieceIds);
+    } else {
+      // Unselecting: Add to closing list first to trigger animation
+      let closingPieceIds = this.state.closingPieceIds;
+      closingPieceIds.add(pieceId);
+      this.setState({ closingPieceIds: closingPieceIds });
+    }
   }
 
-  setSelectedPieceIds(selectedPieceIds: Set<number>) {
+  handleAnimationEnd(pieceId: number) {
+    // Animation finished, now actually remove it
+    let selectedPieceIds = this.state.selectedPieceIds;
+    selectedPieceIds.delete(pieceId);
+
+    let closingPieceIds = this.state.closingPieceIds;
+    closingPieceIds.delete(pieceId);
+
+    this.setSelectedPieceIds(selectedPieceIds, closingPieceIds);
+  }
+
+  setSelectedPieceIds(selectedPieceIds: Set<number>, closingPieceIds: Set<number> = this.state.closingPieceIds) {
     if (selectedPieceIds.size === 0) {
       this.setState({
         selectedPieceIds: selectedPieceIds,
+        closingPieceIds: closingPieceIds,
         isGameValid: false,
         missingCells: 0,
         searching: false,
@@ -61,6 +83,7 @@ export default class App extends React.Component<AppProps, AppState> {
 
     this.setState({
       selectedPieceIds: selectedPieceIds,
+      closingPieceIds: closingPieceIds,
       isGameValid: isGameValid,
       searching: false,
       missingCells: 0,
@@ -90,7 +113,7 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   resetSelection = () => {
-    this.setSelectedPieceIds(new Set<number>());
+    this.setSelectedPieceIds(new Set<number>(), new Set<number>());
   }
 
 
@@ -126,8 +149,14 @@ export default class App extends React.Component<AppProps, AppState> {
       <div id='selected-pieces-area' className={isGameValid ? "valid-game" : ""}>
         {this.state.allPieces.map((piece) => {
           if (this.state.selectedPieceIds.has(piece.id)) {
+            const isClosing = this.state.closingPieceIds.has(piece.id);
             return (
-              <div key={piece.id} onClick={() => this.setPieceSelected(piece.id, false)} className="piece-container">
+              <div
+                key={piece.id}
+                onClick={() => this.setPieceSelected(piece.id, false)}
+                className={`piece-container ${isClosing ? "closing" : ""}`}
+                onAnimationEnd={() => isClosing && this.handleAnimationEnd(piece.id)}
+              >
                 <PieceView piece={piece}></PieceView>
               </div>)
           } else {
