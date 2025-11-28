@@ -13,6 +13,7 @@ type AppProps = {
 type AppState = {
   allPieces: gtpLib.JSPiece[],
   selectedPieceIds: Set<number>,
+  closingPieceIds: Set<number>, // Track pieces currently animating out
   isGameValid: boolean,
   missingCells: number,
   searching: boolean,
@@ -23,31 +24,52 @@ export default class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.setPieceSelected = this.setPieceSelected.bind(this);
+    this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
   }
 
   state: AppState = {
     allPieces: this.props.allPiecesGame.pieces,
     selectedPieceIds: new Set<number>(),
+    closingPieceIds: new Set<number>(),
     isGameValid: false,
     missingCells: 0,
     searching: false,
   };
 
   setPieceSelected(pieceId: number, selected: boolean) {
-    let selectedPieceIds = this.state.selectedPieceIds;
     if (selected) {
+      // Selecting: Add immediately
+      let selectedPieceIds = this.state.selectedPieceIds;
       selectedPieceIds.add(pieceId);
-    } else {
-      selectedPieceIds.delete(pieceId);
-    }
+      // Ensure it's not in closing list (in case of rapid toggling)
+      let closingPieceIds = this.state.closingPieceIds;
+      closingPieceIds.delete(pieceId);
 
-    this.setSelectedPieceIds(selectedPieceIds);
+      this.setSelectedPieceIds(selectedPieceIds, closingPieceIds);
+    } else {
+      // Unselecting: Add to closing list first to trigger animation
+      let closingPieceIds = this.state.closingPieceIds;
+      closingPieceIds.add(pieceId);
+      this.setState({ closingPieceIds: closingPieceIds });
+    }
   }
 
-  setSelectedPieceIds(selectedPieceIds: Set<number>) {
+  handleAnimationEnd(pieceId: number) {
+    // Animation finished, now actually remove it
+    let selectedPieceIds = this.state.selectedPieceIds;
+    selectedPieceIds.delete(pieceId);
+
+    let closingPieceIds = this.state.closingPieceIds;
+    closingPieceIds.delete(pieceId);
+
+    this.setSelectedPieceIds(selectedPieceIds, closingPieceIds);
+  }
+
+  setSelectedPieceIds(selectedPieceIds: Set<number>, closingPieceIds: Set<number> = this.state.closingPieceIds) {
     if (selectedPieceIds.size === 0) {
       this.setState({
         selectedPieceIds: selectedPieceIds,
+        closingPieceIds: closingPieceIds,
         isGameValid: false,
         missingCells: 0,
         searching: false,
@@ -61,22 +83,28 @@ export default class App extends React.Component<AppProps, AppState> {
 
     this.setState({
       selectedPieceIds: selectedPieceIds,
+      closingPieceIds: closingPieceIds,
       isGameValid: isGameValid,
       searching: false,
       missingCells: 0,
       solutions: undefined
     });
 
+    const MIN_SEARCH_DISPLAY_MS = 1000;
+
     if (isGameValid) {
       this.setState({
         searching: true
-      });
-
-      let solutions = game.resolve();
-
-      this.setState({
-        searching: false,
-        solutions: solutions
+      }, () => {
+        // Use setTimeout to allow the UI to render the "searching" state
+        // before the heavy computation blocks the main thread.
+        setTimeout(() => {
+          let solutions = game.resolve();
+          this.setState({
+            searching: false,
+            solutions: solutions
+          });
+        }, MIN_SEARCH_DISPLAY_MS);
       });
     }
     else {
@@ -86,23 +114,27 @@ export default class App extends React.Component<AppProps, AppState> {
     }
   }
 
+  resetSelection = () => {
+    this.setSelectedPieceIds(new Set<number>(), new Set<number>());
+  }
+
 
 
   renderAllPieces = () => {
     return (
       <div id='all-pieces-area'>
-        <div className='text-left'>
-          Choisis des pièces:
+        <div className='section-title'>
+          Choisis tes pièces :
         </div>
 
         {this.state.allPieces.map((piece) => {
           let isPieceSelected = this.state.selectedPieceIds.has(piece.id);
           return (
-            <span key={piece.id}
+            <div key={piece.id}
               onClick={() => this.setPieceSelected(piece.id, !isPieceSelected)}
-              className={isPieceSelected ? "selected-piece" : ""}>
+              className={`piece-container ${isPieceSelected ? "selected-piece" : ""}`}>
               <PieceView piece={piece}></PieceView>
-            </span>)
+            </div>)
         })}
       </div>
     );
@@ -119,14 +151,25 @@ export default class App extends React.Component<AppProps, AppState> {
       <div id='selected-pieces-area' className={isGameValid ? "valid-game" : ""}>
         {this.state.allPieces.map((piece) => {
           if (this.state.selectedPieceIds.has(piece.id)) {
+            const isClosing = this.state.closingPieceIds.has(piece.id);
             return (
-              <span key={piece.id} onClick={() => this.setPieceSelected(piece.id, false)}>
+              <div
+                key={piece.id}
+                onClick={() => this.setPieceSelected(piece.id, false)}
+                className={`piece-container ${isClosing ? "closing" : ""}`}
+                onAnimationEnd={() => isClosing && this.handleAnimationEnd(piece.id)}
+              >
                 <PieceView piece={piece}></PieceView>
-              </span>)
+              </div>)
           } else {
-            return (<span></span>)
+            return null;
           }
         })}
+        <div className="reset-button-container">
+          <button className="reset-button" onClick={this.resetSelection}>
+            🗑️ Tout effacer
+          </button>
+        </div>
       </div>
     );
   }
@@ -135,7 +178,9 @@ export default class App extends React.Component<AppProps, AppState> {
     if (this.state.missingCells > 0) {
       return (
         <div id='solutions-area'>
-          Il manque des pièces pour recouvrir { this.state.missingCells } cases.
+          <div className='solution-count'>
+            Il manque des pièces pour recouvrir {this.state.missingCells} cases.
+          </div>
         </div>
       )
     }
@@ -143,7 +188,10 @@ export default class App extends React.Component<AppProps, AppState> {
     if (this.state.searching) {
       return (
         <div id='solutions-area'>
-          Je cherche...
+          <div className='solution-count'>
+            Je réfléchis... 🤔
+          </div>
+          <div className="spinner"></div>
         </div>
       )
     }
@@ -152,14 +200,30 @@ export default class App extends React.Component<AppProps, AppState> {
       return (<div></div>);
     }
 
+    if (this.state.solutions.length === 0) {
+      return (
+        <div id='solutions-area'>
+          <div className='solution-count'>
+            Pas de solution trouvée 😕
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div id='solutions-area'>
-        <div>
-          Il y a {this.state.solutions.length} solutions.
+        <div className='solution-count'>
+          J'ai trouvé {this.state.solutions.length} solutions ! 🎉
         </div>
-        {this.state.solutions.map((solution) => {
-          return <MatrixView matrix={solution} key={solution.svg}></MatrixView>;
-        })}
+        <div className='solutions-grid'>
+          {this.state.solutions.map((solution, index) => {
+            return (
+              <div key={solution.svg + index} className='solution-card'>
+                <MatrixView matrix={solution}></MatrixView>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
@@ -168,7 +232,7 @@ export default class App extends React.Component<AppProps, AppState> {
     return (
       <div className="App">
         <header className="App-header">
-          Solutions pour <a className='App-link' href='https://www.gigamic.com/jeu/gagne-ton-papa' target="_blank" rel="noopener noreferrer"> GAGNE TON PAPA!</a>
+          GAGNE TON PAPA !
         </header>
 
         <div className="App-body">
@@ -178,7 +242,7 @@ export default class App extends React.Component<AppProps, AppState> {
         </div>
 
         <footer className="App-footer">
-          <a href="https://github.com/manuroe/gagne-ton-papa">GitHub</a>
+          <a href="https://github.com/manuroe/gagne-ton-papa" target="_blank" rel="noopener noreferrer">Code source sur GitHub</a>
         </footer>
       </div>
     );
