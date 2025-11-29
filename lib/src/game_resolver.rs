@@ -41,7 +41,7 @@ impl GameResolverTrait for GameResolver {
             let piece = &game.pieces[piece_idx];
             // Inject piece index (1-based) into the high 8 bits of the color
             // This allows distinguishing pieces with the same RGB color
-            let piece_id = (piece_idx as u32) + 1;
+            let piece_id = u32::try_from(piece_idx).expect("Too many pieces") + 1;
             let color_with_id = piece.color | (piece_id << 24);
             
             let piece_with_id = Piece {
