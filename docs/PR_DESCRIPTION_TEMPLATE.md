@@ -1,7 +1,8 @@
 # PR Description Template
 
-<!-- 
-AGENTS: Before sending a PR, populate this file with the proposed title and body.
+<!--
+AGENTS: Before sending a PR, create a new file in `.prs/` (e.g., `.prs/my_feature.md`)
+using this template. Populate it with the proposed title, body, and prompts used.
 Notify the user to review and edit this file.
 Once the user approves, use the content of this file for the `gh pr create` command.
 -->
