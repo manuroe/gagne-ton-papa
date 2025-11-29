@@ -1,4 +1,4 @@
-use nalgebra::{DMatrix, DVector};
+use nalgebra::DMatrix;
 use std::collections::HashSet;
 use std::cmp;
 
@@ -31,20 +31,20 @@ pub fn rotation_variants(matrix: &DMatrix<u32>) -> Vec<DMatrix<u32>> {
 /// This is implemented by transposing the matrix and reversing the row order.
 #[must_use]
 pub fn rotate_matrix(matrix: &DMatrix<u32>) -> DMatrix<u32> {
-    // Switch columns and rows
-    let mut columns: Vec<DVector<u32>> = Vec::new();
-    for row in matrix.row_iter() {
-        let column = row.transpose();
-        columns.insert(0, column);
-     }
-
-    DMatrix::from_columns(&columns)
+    let nrows = matrix.nrows();
+    let ncols = matrix.ncols();
+    
+    // Rotate 90 degrees clockwise: new[i][j] = old[nrows-1-j][i]
+    DMatrix::from_fn(ncols, nrows, |i, j| {
+        matrix[(nrows - 1 - j, i)]
+    })
 }
 
 /// Clamps all values in a matrix to a maximum value.
 ///
 /// Returns a new matrix where all values greater than `max_val` are replaced with `max_val`.
 #[must_use]
+#[allow(dead_code)]
 pub fn max_matrix(matrix: &DMatrix<u32>, max_val: u32) -> DMatrix<u32> {
     matrix.slice((0, 0), (matrix.nrows(), matrix.ncols())).map(|val| cmp::min(val, max_val))
 }
@@ -72,7 +72,7 @@ mod tests {
         // 1 0
         // 1 1
         let matrix = DMatrix::from_row_slice(2, 2, &[1, 0, 1, 1]);
-        let variants = rotation_variants(&matrix);
+        let _variants = rotation_variants(&matrix);
         // L-shape has 8 variants (4 rotations * 2 reflections), all unique?
         // Let's check a simpler one.
         // Square:

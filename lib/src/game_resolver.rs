@@ -76,11 +76,11 @@ impl GameResolverTrait for GameResolver {
 
     fn piece_variants(&self, piece: &Piece) -> Vec<Piece> {
         matrix_tools::rotation_variants(&piece.matrix)
-            .iter()
+            .into_iter()
             .map(|matrix| Piece {
                 color: piece.color,
                 tui_color: piece.tui_color,
-                matrix: matrix.clone()
+                matrix
             })
             .collect()
     }
@@ -100,14 +100,14 @@ impl GameResolver {
     fn resolve_board(board: &DMatrix<u32>, piece: &Piece) -> Vec<DMatrix<u32>> {
         let mut solutions: Vec<DMatrix<u32>> = vec![];
 
-        let normalised_board = matrix_tools::max_matrix(board, 1);
-
         for piece_board in Self::boards_with_piece(piece, board) {
-            let normalised_piece = matrix_tools::max_matrix(&piece_board, 1);
-            let normalised_merged_board = normalised_board.clone() + normalised_piece;
+            // Check for collision by iterating directly instead of creating normalized matrices
+            let has_collision = board.iter()
+                .zip(piece_board.iter())
+                .any(|(b, p)| *b != 0 && *p != 0);
 
-            if normalised_merged_board.max() == 1 {
-                let merged_board = board + piece_board.clone();
+            if !has_collision {
+                let merged_board = board + piece_board;
                 solutions.push(merged_board);
             }
         }
@@ -126,36 +126,26 @@ impl GameResolver {
             return Vec::new();
         }
 
-        let horizontal_position_count: u32 = (board.ncols() - piece.matrix.ncols() + 1)
-            .try_into()
-            .expect("Position count too large");
-
-        // Find all possible horizontal positions (piece at the top)
-        let mut horizontal_positions: Vec<DMatrix<u32>> = (0..horizontal_position_count)
-            .map(|pos| {
-                piece.matrix.clone().insert_columns(0, pos.try_into().unwrap(), 0) * piece.color
-            })
-            .collect();
-
-        // Add empty rows at the top
-        let mut more_horizontal_positions: Vec<DMatrix<u32>> = Vec::new();
-        for position in &horizontal_positions {
-            if board.nrows() < position.nrows() {
-                continue;
-            }
-
-            let remaining_height = board.nrows() - position.nrows();
-            for h in 0..remaining_height {
-                more_horizontal_positions.push(position.clone().insert_rows(0, h + 1, 0));
+        let mut positions = Vec::new();
+        let piece_colored = &piece.matrix * piece.color;
+        
+        // Try all possible positions (row, col) where the top-left of the piece can be placed
+        for start_row in 0..=(board.nrows() - piece.matrix.nrows()) {
+            for start_col in 0..=(board.ncols() - piece.matrix.ncols()) {
+                // Build the board with the piece at this position
+                let mut positioned_piece = DMatrix::zeros(board.nrows(), board.ncols());
+                
+                for r in 0..piece.matrix.nrows() {
+                    for c in 0..piece.matrix.ncols() {
+                        positioned_piece[(start_row + r, start_col + c)] = piece_colored[(r, c)];
+                    }
+                }
+                
+                positions.push(positioned_piece);
             }
         }
-        horizontal_positions.extend(more_horizontal_positions);
 
-        // Add empty rows at the bottom if needed
-        horizontal_positions
-            .iter()
-            .map(|m| m.clone().resize(board.nrows(), board.ncols(), 0))
-            .collect()
+        positions
     }
 }
 
