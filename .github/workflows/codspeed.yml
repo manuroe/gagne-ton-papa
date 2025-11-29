@@ -24,10 +24,12 @@ jobs:
           tool: cargo-codspeed
 
       - name: Build the benchmark target(s)
-        run: cargo codspeed build --manifest-path lib/Cargo.toml
+        working-directory: lib
+        run: cargo codspeed build
 
       - name: Run the benchmarks
         uses: CodSpeedHQ/action@v3
         with:
-          run: cargo codspeed run --manifest-path lib/Cargo.toml
+          working-directory: lib
+          run: cargo codspeed run
           token: ${{ secrets.CODSPEED_TOKEN }}
