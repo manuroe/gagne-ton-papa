@@ -1,65 +1,52 @@
-# Project Context & Standards
+# AI Agent Guidelines & Project Context
 
-This file documents the standards, conventions, and context for the `gagne-ton-papa` project. AI agents and developers should refer to this to maintain consistency.
+> **SYSTEM INSTRUCTION**: All AI agents (Gemini, Claude, ChatGPT, etc.) working on this project **MUST** read and follow these guidelines. This file is the source of truth for project standards, workflows, and context.
 
-## Project Structure
-- **`lib/`**: Core game logic implemented in pure Rust.
-  - **Focus**: Performance, correctness, idiomatic Rust.
-  - **Testing**: High unit test coverage required.
-- **`lib-wasm/`**: WASM bindings for the library.
-  - **Focus**: Exposing `lib` functionality to the web.
-- **`web/`**: React/TypeScript frontend application.
-  - **Focus**: User experience, visualization, responsiveness.
+## 1. Project Overview
+**Name**: `gagne-ton-papa`
+**Description**: A solver for the board game "Gagne Ton Papa" (also known as Katamino).
+**Architecture**:
+- **`lib/`** (Rust): Core solver logic, pure Rust, high performance.
+- **`src/`** (Rust): TUI application to quickly check the solver's output.
+- **`lib-wasm/`** (Rust): WASM bindings exposing `lib` to the web.
+- **`web/`** (React/TypeScript): Frontend application.
 
-## Development Standards
+## 2. Core Rules & Behavior
 
-### Pull Requests
-- **Prompts Sharing**: All PR descriptions **MUST** include a section sharing the prompts used to generate the code. This is critical for knowledge sharing and reproducibility.
-- **Description Editing**: Always offer the user the option to edit the PR description before finalizing or sending it.
+### General
+- **Source of Truth**: This file (`agents.md`) defines the standards. If you are unsure, check here first.
+- **Continuous Improvement**: **CRITICAL**. You must amend this file (`agents.md`) if you discover new patterns, corrections, or user preferences during your interaction. Capture this knowledge for future agents.
 
-### Model Interaction
-- **Quota Limits**: If the model hits a quota limit (e.g., "resume" prompts), ignore the prompt to resume and offer alternative actions (like editing the PR description) instead of trying to continue blindly.
+### Pull Requests (PRs)
+- **Workflow**:
+    1.  **Draft**: Populate a new file in `.prs/` (e.g., `.prs/my_feature.md`) with the Title, Body, and **Prompts Used**, using `docs/PR_DESCRIPTION_TEMPLATE.md` as a base.
+    2.  **Review**: Ask the user to review/edit this file.
+    3.  **Send**: Only after user approval, use the content of this file to create the PR.
+- **Prompts Sharing**: You **MUST** document the prompts that generated the code in the PR description. Skip resuming requests after a model hits a quota limit.
 
-### Rust (lib & lib-wasm)
-- **Code Style**:
-  - Follow idiomatic Rust patterns.
-  - Ensure code is Clippy-compliant (no `#[allow(clippy::...)]` unless strictly necessary).
-  - Avoid unreadable literals; use named constants or clear formatting.
-- **Testing**:
-  - Write unit tests for all new logic in `lib`.
-  - Ensure `cargo test` passes before committing.
+## 3. Tech Stack & Standards
 
-### Web (React/TypeScript)
-- **UI/UX Guidelines**:
-  - **Child-Friendly**: Design for children (vibrant colors, clear typography, intuitive interactions).
-  - **Responsive**: Ensure the game is playable on mobile and tablet devices.
-  - **Visuals**:
-    - Use clear borders for game pieces.
-    - Ensure pieces are distinct and easy to distinguish.
-    - Use "premium" aesthetics (gradients, rounded corners, smooth animations).
-- **Tech Stack**:
-  - React 18+
-  - TypeScript
-  - CSS Modules or Vanilla CSS (avoid adding heavy UI frameworks like Tailwind unless requested).
+### Rust (`lib`, `lib-wasm`, `src`)
+- **Style**: Idiomatic Rust. No `unwrap()` in production code (use `expect` with context or proper error handling).
+- **Linting**: Strict Clippy compliance. No `#[allow(clippy::...)]` without a very strong reason.
+- **Testing**: High coverage for `lib`. Run `cargo test` before submitting.
 
-## Workflows
+### Web (`web`)
+- **Framework**: React 18+, TypeScript.
+- **Styling**: CSS Modules or Vanilla CSS. **NO** Tailwind unless explicitly requested.
+- **UX/UI**:
+    - **Target Audience**: Children (vibrant, clear, intuitive).
+    - **Responsiveness**: Mobile-first or fully responsive.
+    - **Visuals**: Distinct borders for game pieces. Premium feel (smooth animations).
 
-### Build Core Library
-```bash
-cd lib
-cargo build
-cargo test
-```
+## 4. Workflows
 
-### Build WASM
-```bash
-cd lib-wasm
-wasm-pack build --target web
-# Note: Target 'web' is often preferred for direct browser usage, but check project specific setup.
-```
+### Build & Test
+- **Core**: `cd lib && cargo build && cargo test`
+- **WASM**: `cd lib-wasm && wasm-pack build --target web`
+- **Web**: `cd web && npm start`
 
-### Run Web App
-```bash
-cd web
-npm start
-```
+### Common Tasks
+- **New Feature**: Plan -> Implement in `lib` -> Expose in `lib-wasm` -> UI in `web`.
+- **Refactor**: Ensure tests pass at every step.
+
