@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Izvēlies savus gabaliņus:",
+  "clearAll": "Notīrīt visu",
+  "missingCells_one": "Trūkst gabaliņu, lai aizpildītu {{count}} šūnu.",
+  "missingCells_other": "Trūkst gabaliņu, lai aizpildītu {{count}} šūnas.",
+  "thinking": "Domāju... 🤔",
+  "noSolution": "Risinājums nav atrasts 😕",
+  "foundSolutions_one": "Atradu {{count}} risinājumu! 🎉",
+  "foundSolutions_other": "Atradu {{count}} risinājumus! 🎉",
+  "sourceCode": "Pirmkods GitHub",
+  "language": "Valoda"
+}

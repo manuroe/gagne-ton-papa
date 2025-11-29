@@ -1,0 +1,10 @@
+{
+  "choosePieces": "조각을 선택하세요:",
+  "clearAll": "모두 지우기",
+  "missingCells_other": "{{count}}개의 셀을 덮을 조각이 부족합니다.",
+  "thinking": "생각 중... 🤔",
+  "noSolution": "해결책을 찾지 못했습니다 😕",
+  "foundSolutions_other": "{{count}}개의 해결책을 찾았습니다! 🎉",
+  "sourceCode": "GitHub의 소스 코드",
+  "language": "언어"
+}

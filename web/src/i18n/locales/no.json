@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Velg dine brikker:",
+  "clearAll": "Fjern alt",
+  "missingCells_one": "Det mangler brikker for å dekke {{count}} celle.",
+  "missingCells_other": "Det mangler brikker for å dekke {{count}} celler.",
+  "thinking": "Jeg tenker... 🤔",
+  "noSolution": "Ingen løsning funnet 😕",
+  "foundSolutions_one": "Jeg fant {{count}} løsning! 🎉",
+  "foundSolutions_other": "Jeg fant {{count}} løsninger! 🎉",
+  "sourceCode": "Kildekode på GitHub",
+  "language": "Språk"
+}

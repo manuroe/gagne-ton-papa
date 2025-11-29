@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Vali oma tükid:",
+  "clearAll": "Tühjenda kõik",
+  "missingCells_one": "Puudu on tükke {{count}} lahtri katmiseks.",
+  "missingCells_other": "Puudu on tükke {{count}} lahtri katmiseks.",
+  "thinking": "Mõtlen... 🤔",
+  "noSolution": "Lahendust ei leitud 😕",
+  "foundSolutions_one": "Leidsin {{count}} lahenduse! 🎉",
+  "foundSolutions_other": "Leidsin {{count}} lahendust! 🎉",
+  "sourceCode": "Lähtekood GitHubis",
+  "language": "Keel"
+}
