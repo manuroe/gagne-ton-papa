@@ -1,8 +1,8 @@
-
 use nalgebra::DMatrix;
 
 use crate::models::{Game, Piece};
 use crate::matrix_tools;
+use crate::bitboard::{BitBoard, generate_positions};
 
 /// Trait for game puzzle solvers.
 ///
@@ -30,39 +30,54 @@ pub struct GameResolver;
 impl GameResolverTrait for GameResolver {
     fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>> {
         let rows = usize::try_from(game.rows()).expect("Row count too large");
-        let columns = usize::try_from(game.columns).expect("Column count too large");
-        let board = DMatrix::<u32>::zeros(rows, columns);
-
+        let cols = usize::try_from(game.columns).expect("Column count too large");
         if !game.is_valid() {
             return vec![];
         }
 
-        // Optimization: Start placing bigger pieces first to prune the search space earlier
+        // Start with an empty board represented as (BitBoard, DMatrix).
+        let empty_board_bits: BitBoard = 0;
+        let empty_board_matrix = DMatrix::<u32>::zeros(rows, cols);
+        
+        // Solutions are stored as (BitBoard, DMatrix) tuples during the search.
+        // BitBoard for fast collision detection, DMatrix for preserving colors.
+        let mut solutions: Vec<(BitBoard, DMatrix<u32>)> = vec![(empty_board_bits, empty_board_matrix)];
+
+        // Order pieces by decreasing cell count (already done in original code).
         let mut piece_indices: Vec<_> = (0..game.pieces.len()).collect();
         piece_indices.sort_by_key(|&i| std::cmp::Reverse(game.pieces[i].cells()));
 
-        let mut solutions: Vec<DMatrix<u32>> = vec![board];
         for &piece_idx in &piece_indices {
             let piece = &game.pieces[piece_idx];
-            // Inject piece index (1-based) into the high 8 bits of the color
-            // This allows distinguishing pieces with the same RGB color
+            // Encode piece index into the high 8 bits of its color (as before).
             let piece_id = u32::try_from(piece_idx).expect("Too many pieces") + 1;
             let color_with_id = piece.color | (piece_id << 24);
-            
+
             let piece_with_id = Piece {
                 matrix: piece.matrix.clone(),
                 color: color_with_id,
                 tui_color: piece.tui_color,
             };
 
-            let mut next_solutions: Vec<DMatrix<u32>> = vec![];
-            
+            let mut next_solutions: Vec<(BitBoard, DMatrix<u32>)> = Vec::new();
+
             for variant in self.piece_variants(&piece_with_id) {
-                for solution in &solutions {
-                    next_solutions.extend(Self::resolve_board(solution, &variant));
+                // Generate all possible placements for this piece as (BitBoard, DMatrix) tuples.
+                let placements = generate_positions(&variant, rows, cols);
+                
+                for (placement_bits, placement_matrix) in placements {
+                    for (board_bits, board_matrix) in &solutions {
+                        // Collision test: no overlapping 1 bits.
+                        if board_bits & placement_bits == 0 {
+                            // Merge the piece into the board.
+                            let new_bits = board_bits | placement_bits;
+                            // Matrix addition preserves the colors since we know there's no overlap
+                            let new_matrix = board_matrix + &placement_matrix;
+                            next_solutions.push((new_bits, new_matrix));
+                        }
+                    }
                 }
             }
-
             solutions = next_solutions;
             if solutions.is_empty() {
                 break;
@@ -71,7 +86,12 @@ impl GameResolverTrait for GameResolver {
             #[cfg(debug_assertions)]
             println!("- Found {} possible boards for piece {}", solutions.len(), piece_idx);
         }
+
+        // Return the colored matrices from the solutions
         solutions
+            .into_iter()
+            .map(|(_, matrix)| matrix)
+            .collect()
     }
 
     fn piece_variants(&self, piece: &Piece) -> Vec<Piece> {
@@ -80,7 +100,7 @@ impl GameResolverTrait for GameResolver {
             .map(|matrix| Piece {
                 color: piece.color,
                 tui_color: piece.tui_color,
-                matrix
+                matrix,
             })
             .collect()
     }
@@ -88,65 +108,6 @@ impl GameResolverTrait for GameResolver {
 
 
 impl GameResolver {
-    /// Finds all possible boards where the piece fits in the passed board.
-    /// 
-    /// The algorithm:
-    /// 1. Generate all possible positions for the piece on the board
-    /// 2. Filter out positions that collide with existing pieces
-    /// 3. Merge valid positions with the current board state
-    ///
-    /// Collision detection works by normalizing both matrices to binary (0/1),
-    /// adding them, and checking if any cell has a value > 1.
-    fn resolve_board(board: &DMatrix<u32>, piece: &Piece) -> Vec<DMatrix<u32>> {
-        let mut solutions: Vec<DMatrix<u32>> = vec![];
-
-        for piece_board in Self::boards_with_piece(piece, board) {
-            // Check for collision by iterating directly instead of creating normalized matrices
-            let has_collision = board.iter()
-                .zip(piece_board.iter())
-                .any(|(b, p)| *b != 0 && *p != 0);
-
-            if !has_collision {
-                let merged_board = board + piece_board;
-                solutions.push(merged_board);
-            }
-        }
-
-        solutions
-    }
-
-    /// Returns all boards where the piece can fit.
-    ///
-    /// Generates all possible positions for a piece on a board by:
-    /// 1. Creating horizontal positions (left to right)
-    /// 2. Adding vertical positions (top to bottom)
-    /// 3. Padding to match board dimensions
-    fn boards_with_piece(piece: &Piece, board: &DMatrix<u32>) -> Vec<DMatrix<u32>> {
-        if piece.matrix.nrows() > board.nrows() || piece.matrix.ncols() > board.ncols() {
-            return Vec::new();
-        }
-
-        let mut positions = Vec::new();
-        let piece_colored = &piece.matrix * piece.color;
-        
-        // Try all possible positions (row, col) where the top-left of the piece can be placed
-        for start_row in 0..=(board.nrows() - piece.matrix.nrows()) {
-            for start_col in 0..=(board.ncols() - piece.matrix.ncols()) {
-                // Build the board with the piece at this position
-                let mut positioned_piece = DMatrix::zeros(board.nrows(), board.ncols());
-                
-                for r in 0..piece.matrix.nrows() {
-                    for c in 0..piece.matrix.ncols() {
-                        positioned_piece[(start_row + r, start_col + c)] = piece_colored[(r, c)];
-                    }
-                }
-                
-                positions.push(positioned_piece);
-            }
-        }
-
-        positions
-    }
 }
 
 #[cfg(test)]
