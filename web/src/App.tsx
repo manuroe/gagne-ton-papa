@@ -176,10 +176,11 @@ export default class App extends React.Component<AppProps, AppState> {
 
   renderSolutions = () => {
     if (this.state.missingCells > 0) {
+      const caseWord = this.state.missingCells === 1 ? "case" : "cases";
       return (
         <div id='solutions-area'>
           <div className='solution-count'>
-            Il manque des pièces pour recouvrir {this.state.missingCells} cases.
+            Il manque des pièces pour recouvrir {this.state.missingCells} {caseWord}.
           </div>
         </div>
       )
