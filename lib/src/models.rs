@@ -8,7 +8,8 @@ use nalgebra::DMatrix;
 #[derive(Debug, Clone)]
 pub struct Piece {
     pub matrix: DMatrix<u32>,
-    pub color: u32
+    pub color: u32,
+    pub tui_color: u32,
 }
 
 impl Piece {
@@ -106,6 +107,7 @@ mod tests {
         Piece {
             matrix: DMatrix::from_row_slice(rows, cols, &values),
             color: 0,
+            tui_color: 0,
         }
     }
 

@@ -54,67 +54,83 @@ impl PieceName {
         match *self {
             Self::RedSquare1 => Piece { 
                 matrix: DMatrix::from_row_slice(1, 1, &[1]),
-                color: COLOR_RED
+                color: COLOR_RED,
+                tui_color: COLOR_RED
             },
             Self::TanBar2 => Piece { 
                 matrix: DMatrix::from_row_slice(2, 1, &[1, 1]),
-                color: COLOR_TAN
+                color: COLOR_TAN,
+                tui_color: COLOR_TAN
             },
             Self::BrownL3 => Piece { 
                 matrix: DMatrix::from_row_slice(2, 2, &[1, 0, 1, 1]),
-                color: COLOR_BROWN
+                color: COLOR_BROWN,
+                tui_color: COLOR_BROWN
             },
             Self::OrangeBar3 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 1, &[1, 1, 1]),
-                color: COLOR_ORANGE
+                color: COLOR_ORANGE,
+                tui_color: COLOR_ORANGE
             },
             Self::PinkBar4 => Piece { 
                 matrix: DMatrix::from_row_slice(4, 1, &[1, 1, 1, 1]),
-                color: COLOR_PINK
+                color: COLOR_PINK,
+                tui_color: COLOR_PINK
             },
             Self::GreenL4 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 2, &[1, 0, 1, 0, 1, 1]),
-                color: COLOR_GREEN
+                color: COLOR_GREEN,
+                tui_color: COLOR_GREEN
             },
             Self::BlueT4 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 2, &[1, 0, 1, 1, 1, 0]),
-                color: COLOR_BLUE
+                color: COLOR_BLUE,
+                tui_color: COLOR_BLUE
             },
             Self::YellowZigZag4 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 2, &[0, 1, 1, 1, 1, 0]),
-                color: COLOR_YELLOW
+                color: COLOR_YELLOW,
+                tui_color: COLOR_YELLOW
             },
             Self::VioletSquare4 => Piece { 
                 matrix: DMatrix::from_row_slice(2, 2, &[1, 1, 1, 1]),
-                color: COLOR_VIOLET
+                color: COLOR_VIOLET,
+                tui_color: COLOR_VIOLET
             },
             Self::OrangeL5 => Piece { 
                 matrix: DMatrix::from_row_slice(4, 2, &[1, 0, 1, 0, 1, 0, 1, 1]),
-                color: COLOR_ORANGE_DARK
+                color: COLOR_ORANGE,
+                tui_color: COLOR_ORANGE_DARK
             },
             Self::BrownT5 => Piece { 
                 matrix: DMatrix::from_row_slice(4, 2, &[0, 1, 1, 1, 0, 1, 0, 1]),
-                color: COLOR_BROWN_DARK
+                color: COLOR_BROWN,
+                tui_color: COLOR_BROWN_DARK
             },
             Self::VioletZigZag5 => Piece { 
                 matrix: DMatrix::from_row_slice(4, 2, &[0, 1, 0, 1, 1, 1, 1, 0]),
-                color: COLOR_VIOLET_GREEN
+                color: COLOR_VIOLET,
+                tui_color: COLOR_VIOLET_GREEN
             },
             Self::BlueL5 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 3, &[1, 0, 0, 1, 0, 0, 1, 1, 1]),
-                color: COLOR_BLUE_DARK
+                color: COLOR_BLUE_DARK,
+                tui_color: COLOR_BLUE_DARK
             },
             Self::PinkNotSquare5 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 2, &[0, 1, 1, 1, 1, 1]),
-                color: COLOR_PINK_DARK
+                color: COLOR_PINK,
+                tui_color: COLOR_PINK_DARK
             },
             Self::YellowU5 => Piece { 
                 matrix: DMatrix::from_row_slice(3, 2, &[1, 1, 1, 0, 1, 1]),
-                color: COLOR_YELLOW_DARK
+                color: COLOR_YELLOW,
+                tui_color: COLOR_YELLOW_DARK
             },
             Self::BlueS5 => Piece {  
                 matrix: DMatrix::from_row_slice(3, 3, &[0, 1, 1, 0, 1, 0, 1, 1, 0]),
-                color: COLOR_BLUE_LIGHT
+                color: COLOR_BLUE,
+                tui_color: COLOR_BLUE_LIGHT
             },
         }
     }
@@ -151,3 +167,4 @@ impl Game {
         }
      }
 }
+
