@@ -1,13 +1,16 @@
 import React from 'react';
 import './App.css';
+import { useTranslation } from 'react-i18next';
 
 import * as gtpLib from 'lib-wasm';
 import MatrixView from './MatrixView';
 import PieceView from './PieceView';
+import LanguageSelector from './LanguageSelector';
 
 
-type AppProps = {
-  allPiecesGame: gtpLib.JSGame
+type AppInnerProps = {
+  allPiecesGame: gtpLib.JSGame;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }
 
 type AppState = {
@@ -20,8 +23,8 @@ type AppState = {
   solutions?: gtpLib.JSMatrix[],
 }
 
-export default class App extends React.Component<AppProps, AppState> {
-  constructor(props: AppProps) {
+class AppInner extends React.Component<AppInnerProps, AppState> {
+  constructor(props: AppInnerProps) {
     super(props);
     this.setPieceSelected = this.setPieceSelected.bind(this);
     this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
@@ -132,10 +135,11 @@ export default class App extends React.Component<AppProps, AppState> {
 
 
   renderAllPieces = () => {
+    const { t } = this.props;
     return (
       <div id='all-pieces-area'>
         <div className='section-title'>
-          Choisis tes pièces :
+          {t('choosePieces')}
         </div>
 
         {this.state.allPieces.map((piece) => {
@@ -152,6 +156,7 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   renderSelectedPieces = () => {
+    const { t } = this.props;
     if (!this.state.selectedPieceIds.size) {
       return (<div></div>);
     }
@@ -178,7 +183,7 @@ export default class App extends React.Component<AppProps, AppState> {
         })}
         <div className="reset-button-container">
           <button className="reset-button" onClick={this.resetSelection}>
-            🗑️ Tout effacer
+            🗑️ {t('clearAll')}
           </button>
         </div>
       </div>
@@ -186,12 +191,12 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   renderSolutions = () => {
+    const { t } = this.props;
     if (this.state.missingCells > 0) {
-      const caseWord = this.state.missingCells === 1 ? "case" : "cases";
       return (
         <div id='solutions-area'>
           <div className='solution-count'>
-            Il manque des pièces pour recouvrir {this.state.missingCells} {caseWord}.
+            {t('missingCells', { count: this.state.missingCells })}
           </div>
         </div>
       )
@@ -201,7 +206,7 @@ export default class App extends React.Component<AppProps, AppState> {
       return (
         <div id='solutions-area'>
           <div className='solution-count'>
-            Je réfléchis... 🤔
+            {t('thinking')}
           </div>
           <div className="spinner"></div>
         </div>
@@ -216,7 +221,7 @@ export default class App extends React.Component<AppProps, AppState> {
       return (
         <div id='solutions-area'>
           <div className='solution-count'>
-            Pas de solution trouvée 😕
+            {t('noSolution')}
           </div>
         </div>
       )
@@ -225,7 +230,7 @@ export default class App extends React.Component<AppProps, AppState> {
     return (
       <div id='solutions-area'>
         <div className='solution-count'>
-          J'ai trouvé {this.state.solutions.length} solutions ! 🎉
+          {t('foundSolutions', { count: this.state.solutions.length })}
         </div>
         <div className='solutions-grid'>
           {this.state.solutions.map((solution, index) => {
@@ -241,6 +246,7 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   render() {
+    const { t } = this.props;
     return (
       <div className="App">
         <header className="App-header">
@@ -254,9 +260,22 @@ export default class App extends React.Component<AppProps, AppState> {
         </div>
 
         <footer className="App-footer">
-          <a href="https://github.com/manuroe/gagne-ton-papa" target="_blank" rel="noopener noreferrer">Code source sur GitHub</a>
+          <div className="footer-content">
+            <a href="https://github.com/manuroe/gagne-ton-papa" target="_blank" rel="noopener noreferrer">{t('sourceCode')}</a>
+            <LanguageSelector />
+          </div>
         </footer>
       </div>
     );
   }
+}
+
+// Wrapper component that uses hook and passes t function to class component
+type AppProps = {
+  allPiecesGame: gtpLib.JSGame;
+};
+
+export default function App({ allPiecesGame }: AppProps) {
+  const { t } = useTranslation();
+  return <AppInner allPiecesGame={allPiecesGame} t={t} />;
 }

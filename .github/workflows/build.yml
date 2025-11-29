@@ -45,6 +45,6 @@ jobs:
       - working-directory: ./lib-wasm
         run: wasm-pack build --target web
 
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
       # - run: npm test
       - run: npm run build

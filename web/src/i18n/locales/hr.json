@@ -1,0 +1,14 @@
+{
+  "choosePieces": "Odaberi svoje dijelove:",
+  "clearAll": "Obriši sve",
+  "missingCells_one": "Nedostaju dijelovi za pokrivanje {{count}} ćelije.",
+  "missingCells_few": "Nedostaju dijelovi za pokrivanje {{count}} ćelije.",
+  "missingCells_other": "Nedostaju dijelovi za pokrivanje {{count}} ćelija.",
+  "thinking": "Razmišljam... 🤔",
+  "noSolution": "Rješenje nije pronađeno 😕",
+  "foundSolutions_one": "Pronašao sam {{count}} rješenje! 🎉",
+  "foundSolutions_few": "Pronašao sam {{count}} rješenja! 🎉",
+  "foundSolutions_other": "Pronašao sam {{count}} rješenja! 🎉",
+  "sourceCode": "Izvorni kod na GitHubu",
+  "language": "Jezik"
+}

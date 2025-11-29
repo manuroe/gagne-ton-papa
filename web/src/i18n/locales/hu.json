@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Válaszd ki a darabokat:",
+  "clearAll": "Összes törlése",
+  "missingCells_one": "Hiányzó darabok {{count}} cella lefedéséhez.",
+  "missingCells_other": "Hiányzó darabok {{count}} cella lefedéséhez.",
+  "thinking": "Gondolkodom... 🤔",
+  "noSolution": "Nem találtam megoldást 😕",
+  "foundSolutions_one": "Találtam {{count}} megoldást! 🎉",
+  "foundSolutions_other": "Találtam {{count}} megoldást! 🎉",
+  "sourceCode": "Forráskód a GitHubon",
+  "language": "Nyelv"
+}

@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Vælg dine brikker:",
+  "clearAll": "Ryd alt",
+  "missingCells_one": "Der mangler brikker til at dække {{count}} felt.",
+  "missingCells_other": "Der mangler brikker til at dække {{count}} felter.",
+  "thinking": "Jeg tænker... 🤔",
+  "noSolution": "Ingen løsning fundet 😕",
+  "foundSolutions_one": "Jeg fandt {{count}} løsning! 🎉",
+  "foundSolutions_other": "Jeg fandt {{count}} løsninger! 🎉",
+  "sourceCode": "Kildekode på GitHub",
+  "language": "Sprog"
+}

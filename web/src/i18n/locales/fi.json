@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Valitse palasi:",
+  "clearAll": "Tyhjennä kaikki",
+  "missingCells_one": "Puuttuu paloja {{count}} solun peittämiseen.",
+  "missingCells_other": "Puuttuu paloja {{count}} solun peittämiseen.",
+  "thinking": "Ajattelen... 🤔",
+  "noSolution": "Ratkaisua ei löytynyt 😕",
+  "foundSolutions_one": "Löysin {{count}} ratkaisun! 🎉",
+  "foundSolutions_other": "Löysin {{count}} ratkaisua! 🎉",
+  "sourceCode": "Lähdekoodi GitHubissa",
+  "language": "Kieli"
+}

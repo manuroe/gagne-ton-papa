@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Kies je stukken:",
+  "clearAll": "Alles wissen",
+  "missingCells_one": "Er ontbreken stukken om {{count}} cel te bedekken.",
+  "missingCells_other": "Er ontbreken stukken om {{count}} cellen te bedekken.",
+  "thinking": "Ik denk na... 🤔",
+  "noSolution": "Geen oplossing gevonden 😕",
+  "foundSolutions_one": "Ik heb {{count}} oplossing gevonden! 🎉",
+  "foundSolutions_other": "Ik heb {{count}} oplossingen gevonden! 🎉",
+  "sourceCode": "Broncode op GitHub",
+  "language": "Taal"
+}

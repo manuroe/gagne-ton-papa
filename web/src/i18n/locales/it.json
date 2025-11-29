@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Scegli i tuoi pezzi:",
+  "clearAll": "Cancella tutto",
+  "missingCells_one": "Mancano pezzi per coprire {{count}} cella.",
+  "missingCells_other": "Mancano pezzi per coprire {{count}} celle.",
+  "thinking": "Sto pensando... 🤔",
+  "noSolution": "Nessuna soluzione trovata 😕",
+  "foundSolutions_one": "Ho trovato {{count}} soluzione! 🎉",
+  "foundSolutions_other": "Ho trovato {{count}} soluzioni! 🎉",
+  "sourceCode": "Codice sorgente su GitHub",
+  "language": "Lingua"
+}
