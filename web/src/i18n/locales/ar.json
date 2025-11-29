@@ -1,0 +1,20 @@
+{
+  "choosePieces": "اختر قطعك:",
+  "clearAll": "مسح الكل",
+  "missingCells_zero": "لا توجد خلايا مفقودة.",
+  "missingCells_one": "قطع مفقودة لتغطية خلية {{count}}.",
+  "missingCells_two": "قطع مفقودة لتغطية خليتين.",
+  "missingCells_few": "قطع مفقودة لتغطية {{count}} خلايا.",
+  "missingCells_many": "قطع مفقودة لتغطية {{count}} خلية.",
+  "missingCells_other": "قطع مفقودة لتغطية {{count}} خلية.",
+  "thinking": "أفكر... 🤔",
+  "noSolution": "لم يتم العثور على حل 😕",
+  "foundSolutions_zero": "لم أجد أي حل.",
+  "foundSolutions_one": "وجدت حلاً واحداً! 🎉",
+  "foundSolutions_two": "وجدت حلين! 🎉",
+  "foundSolutions_few": "وجدت {{count}} حلول! 🎉",
+  "foundSolutions_many": "وجدت {{count}} حلاً! 🎉",
+  "foundSolutions_other": "وجدت {{count}} حل! 🎉",
+  "sourceCode": "الكود المصدري على GitHub",
+  "language": "اللغة"
+}

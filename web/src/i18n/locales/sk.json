@@ -1,0 +1,14 @@
+{
+  "choosePieces": "Vyber si svoje dieliky:",
+  "clearAll": "Vymazať všetko",
+  "missingCells_one": "Chýbajú dieliky na pokrytie {{count}} bunky.",
+  "missingCells_few": "Chýbajú dieliky na pokrytie {{count}} buniek.",
+  "missingCells_other": "Chýbajú dieliky na pokrytie {{count}} buniek.",
+  "thinking": "Premýšľam... 🤔",
+  "noSolution": "Riešenie sa nenašlo 😕",
+  "foundSolutions_one": "Našiel som {{count}} riešenie! 🎉",
+  "foundSolutions_few": "Našiel som {{count}} riešenia! 🎉",
+  "foundSolutions_other": "Našiel som {{count}} riešení! 🎉",
+  "sourceCode": "Zdrojový kód na GitHube",
+  "language": "Jazyk"
+}

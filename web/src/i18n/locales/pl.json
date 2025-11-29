@@ -1,0 +1,16 @@
+{
+  "choosePieces": "Wybierz swoje elementy:",
+  "clearAll": "Wyczyść wszystko",
+  "missingCells_one": "Brakuje elementów, aby pokryć {{count}} komórkę.",
+  "missingCells_few": "Brakuje elementów, aby pokryć {{count}} komórki.",
+  "missingCells_many": "Brakuje elementów, aby pokryć {{count}} komórek.",
+  "missingCells_other": "Brakuje elementów, aby pokryć {{count}} komórek.",
+  "thinking": "Myślę... 🤔",
+  "noSolution": "Nie znaleziono rozwiązania 😕",
+  "foundSolutions_one": "Znalazłem {{count}} rozwiązanie! 🎉",
+  "foundSolutions_few": "Znalazłem {{count}} rozwiązania! 🎉",
+  "foundSolutions_many": "Znalazłem {{count}} rozwiązań! 🎉",
+  "foundSolutions_other": "Znalazłem {{count}} rozwiązań! 🎉",
+  "sourceCode": "Kod źródłowy na GitHub",
+  "language": "Język"
+}

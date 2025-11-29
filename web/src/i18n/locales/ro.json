@@ -1,0 +1,14 @@
+{
+  "choosePieces": "Alege-ți piesele:",
+  "clearAll": "Șterge tot",
+  "missingCells_one": "Lipsesc piese pentru a acoperi {{count}} celulă.",
+  "missingCells_few": "Lipsesc piese pentru a acoperi {{count}} celule.",
+  "missingCells_other": "Lipsesc piese pentru a acoperi {{count}} celule.",
+  "thinking": "Mă gândesc... 🤔",
+  "noSolution": "Nu am găsit nicio soluție 😕",
+  "foundSolutions_one": "Am găsit {{count}} soluție! 🎉",
+  "foundSolutions_few": "Am găsit {{count}} soluții! 🎉",
+  "foundSolutions_other": "Am găsit {{count}} soluții! 🎉",
+  "sourceCode": "Cod sursă pe GitHub",
+  "language": "Limbă"
+}

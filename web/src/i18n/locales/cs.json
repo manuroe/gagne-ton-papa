@@ -1,0 +1,14 @@
+{
+  "choosePieces": "Vyber si své dílky:",
+  "clearAll": "Vymazat vše",
+  "missingCells_one": "Chybí dílky k pokrytí {{count}} buňky.",
+  "missingCells_few": "Chybí dílky k pokrytí {{count}} buněk.",
+  "missingCells_other": "Chybí dílky k pokrytí {{count}} buněk.",
+  "thinking": "Přemýšlím... 🤔",
+  "noSolution": "Řešení nebylo nalezeno 😕",
+  "foundSolutions_one": "Našel jsem {{count}} řešení! 🎉",
+  "foundSolutions_few": "Našel jsem {{count}} řešení! 🎉",
+  "foundSolutions_other": "Našel jsem {{count}} řešení! 🎉",
+  "sourceCode": "Zdrojový kód na GitHubu",
+  "language": "Jazyk"
+}

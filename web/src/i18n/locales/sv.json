@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Välj dina bitar:",
+  "clearAll": "Rensa allt",
+  "missingCells_one": "Det saknas bitar för att täcka {{count}} cell.",
+  "missingCells_other": "Det saknas bitar för att täcka {{count}} celler.",
+  "thinking": "Jag tänker... 🤔",
+  "noSolution": "Ingen lösning hittades 😕",
+  "foundSolutions_one": "Jag hittade {{count}} lösning! 🎉",
+  "foundSolutions_other": "Jag hittade {{count}} lösningar! 🎉",
+  "sourceCode": "Källkod på GitHub",
+  "language": "Språk"
+}

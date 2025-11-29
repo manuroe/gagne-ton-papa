@@ -1,0 +1,16 @@
+{
+  "choosePieces": "Izberi svoje kose:",
+  "clearAll": "Izbriši vse",
+  "missingCells_one": "Manjkajo kosi za pokritje {{count}} celice.",
+  "missingCells_two": "Manjkajo kosi za pokritje {{count}} celic.",
+  "missingCells_few": "Manjkajo kosi za pokritje {{count}} celic.",
+  "missingCells_other": "Manjkajo kosi za pokritje {{count}} celic.",
+  "thinking": "Razmišljam... 🤔",
+  "noSolution": "Rešitev ni bila najdena 😕",
+  "foundSolutions_one": "Našel sem {{count}} rešitev! 🎉",
+  "foundSolutions_two": "Našel sem {{count}} rešitvi! 🎉",
+  "foundSolutions_few": "Našel sem {{count}} rešitve! 🎉",
+  "foundSolutions_other": "Našel sem {{count}} rešitev! 🎉",
+  "sourceCode": "Izvorna koda na GitHubu",
+  "language": "Jezik"
+}

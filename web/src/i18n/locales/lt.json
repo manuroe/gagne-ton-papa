@@ -1,0 +1,14 @@
+{
+  "choosePieces": "Pasirink savo detales:",
+  "clearAll": "Išvalyti viską",
+  "missingCells_one": "Trūksta detalių, kad būtų uždengta {{count}} ląstelė.",
+  "missingCells_few": "Trūksta detalių, kad būtų uždengtos {{count}} ląstelės.",
+  "missingCells_other": "Trūksta detalių, kad būtų uždengta {{count}} ląstelių.",
+  "thinking": "Galvoju... 🤔",
+  "noSolution": "Sprendimas nerastas 😕",
+  "foundSolutions_one": "Radau {{count}} sprendimą! 🎉",
+  "foundSolutions_few": "Radau {{count}} sprendimus! 🎉",
+  "foundSolutions_other": "Radau {{count}} sprendimų! 🎉",
+  "sourceCode": "Šaltinio kodas GitHub platformoje",
+  "language": "Kalba"
+}

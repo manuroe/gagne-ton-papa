@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Choisis tes pièces :",
+  "clearAll": "Tout effacer",
+  "missingCells_one": "Il manque des pièces pour recouvrir {{count}} case.",
+  "missingCells_other": "Il manque des pièces pour recouvrir {{count}} cases.",
+  "thinking": "Je réfléchis... 🤔",
+  "noSolution": "Pas de solution trouvée 😕",
+  "foundSolutions_one": "J'ai trouvé {{count}} solution ! 🎉",
+  "foundSolutions_other": "J'ai trouvé {{count}} solutions ! 🎉",
+  "sourceCode": "Code source sur GitHub",
+  "language": "Langue"
+}

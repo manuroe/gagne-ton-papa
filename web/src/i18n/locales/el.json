@@ -1,0 +1,12 @@
+{
+  "choosePieces": "Διάλεξε τα κομμάτια σου:",
+  "clearAll": "Διαγραφή όλων",
+  "missingCells_one": "Λείπουν κομμάτια για να καλυφθεί {{count}} κελί.",
+  "missingCells_other": "Λείπουν κομμάτια για να καλυφθούν {{count}} κελιά.",
+  "thinking": "Σκέφτομαι... 🤔",
+  "noSolution": "Δεν βρέθηκε λύση 😕",
+  "foundSolutions_one": "Βρήκα {{count}} λύση! 🎉",
+  "foundSolutions_other": "Βρήκα {{count}} λύσεις! 🎉",
+  "sourceCode": "Πηγαίος κώδικας στο GitHub",
+  "language": "Γλώσσα"
+}
