@@ -93,18 +93,29 @@ export default class App extends React.Component<AppProps, AppState> {
     const MIN_SEARCH_DISPLAY_MS = 1000;
 
     if (isGameValid) {
+      const searchStartTime = Date.now();
+
       this.setState({
         searching: true
       }, () => {
         // Use setTimeout to allow the UI to render the "searching" state
         // before the heavy computation blocks the main thread.
         setTimeout(() => {
+          // Start computation immediately
           let solutions = game.resolve();
-          this.setState({
-            searching: false,
-            solutions: solutions
-          });
-        }, MIN_SEARCH_DISPLAY_MS);
+
+          // Calculate how long the computation took
+          const searchDuration = Date.now() - searchStartTime;
+          const remainingDisplayTime = Math.max(0, MIN_SEARCH_DISPLAY_MS - searchDuration);
+
+          // Ensure the "searching" message is visible for at least MIN_SEARCH_DISPLAY_MS
+          setTimeout(() => {
+            this.setState({
+              searching: false,
+              solutions: solutions
+            });
+          }, remainingDisplayTime);
+        }, 0);
       });
     }
     else {
