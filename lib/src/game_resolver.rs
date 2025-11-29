@@ -39,9 +39,20 @@ impl GameResolverTrait for GameResolver {
         let mut solutions: Vec<DMatrix<u32>> = vec![board];
         for &piece_idx in &piece_indices {
             let piece = &game.pieces[piece_idx];
+            // Inject piece index (1-based) into the high 8 bits of the color
+            // This allows distinguishing pieces with the same RGB color
+            let piece_id = u32::try_from(piece_idx).expect("Too many pieces") + 1;
+            let color_with_id = piece.color | (piece_id << 24);
+            
+            let piece_with_id = Piece {
+                matrix: piece.matrix.clone(),
+                color: color_with_id,
+                tui_color: piece.tui_color,
+            };
+
             let mut next_solutions: Vec<DMatrix<u32>> = vec![];
             
-            for variant in self.piece_variants(piece) {
+            for variant in self.piece_variants(&piece_with_id) {
                 for solution in &solutions {
                     next_solutions.extend(Self::resolve_board(solution, &variant));
                 }
@@ -63,6 +74,7 @@ impl GameResolverTrait for GameResolver {
             .iter()
             .map(|matrix| Piece {
                 color: piece.color,
+                tui_color: piece.tui_color,
                 matrix: matrix.clone()
             })
             .collect()
@@ -152,6 +164,7 @@ mod tests {
         Piece {
             matrix: DMatrix::from_row_slice(rows, cols, &values),
             color: 1,
+            tui_color: 1,
         }
     }
 

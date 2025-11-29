@@ -13,6 +13,12 @@ fn main() {
         PieceName::BlueT4.piece(),
     ];
 
+    // Use TUI colors (high contrast) for the terminal app
+    let pieces: Vec<Piece> = pieces.into_iter().map(|mut p| {
+        p.color = p.tui_color;
+        p
+    }).collect();
+
     let game = Game { columns: 5, pieces };
     print_pieces(&game.pieces);
 
@@ -22,7 +28,7 @@ fn main() {
 }
 
 fn print_piece(piece: &Piece) {
-    let matrix = &piece.matrix * piece.color;
+    let matrix = &piece.matrix * piece.tui_color;
     display(&matrix);
 }
 
