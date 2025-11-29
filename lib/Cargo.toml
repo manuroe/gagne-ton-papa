@@ -13,3 +13,11 @@ svg = "0.10.0"
 all = "warn"
 pedantic = "warn"
 nursery = "warn"
+
+[dev-dependencies]
+criterion = "0.5"
+codspeed-criterion-compat = "2.7.2"
+
+[[bench]]
+name = "performance_benchmark"
+harness = false
