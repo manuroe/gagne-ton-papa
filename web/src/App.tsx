@@ -250,10 +250,7 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     return (
       <div className="App">
         <header className="App-header">
-          <div className="header-content">
-            <span className="header-title">GAGNE TON PAPA !</span>
-            <LanguageSelector />
-          </div>
+          GAGNE TON PAPA !
         </header>
 
         <div className="App-body">
@@ -263,7 +260,10 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
         </div>
 
         <footer className="App-footer">
-          <a href="https://github.com/manuroe/gagne-ton-papa" target="_blank" rel="noopener noreferrer">{t('sourceCode')}</a>
+          <div className="footer-content">
+            <a href="https://github.com/manuroe/gagne-ton-papa" target="_blank" rel="noopener noreferrer">{t('sourceCode')}</a>
+            <LanguageSelector />
+          </div>
         </footer>
       </div>
     );

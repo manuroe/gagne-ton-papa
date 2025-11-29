@@ -21,20 +21,6 @@
   margin-bottom: 20px;
 }
 
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  width: 100%;
-  max-width: 800px;
-}
-
-.header-title {
-  flex: 1;
-  text-align: center;
-}
-
 .App-link {
   color: var(--secondary-color);
   text-decoration: none;
@@ -59,6 +45,14 @@
   color: white;
   text-align: center;
   margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 .App-footer a {
