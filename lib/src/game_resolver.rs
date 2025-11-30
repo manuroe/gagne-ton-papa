@@ -12,7 +12,7 @@ pub trait GameResolverTrait {
     /// Finds all valid solutions for the given game.
     fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>>;
 
-    /// Finds the number of valid solutions for the given game.
+    /// Finds the number of valid solutions for the given game without allocating solution matrices.
     fn resolve_count(&self, game: &Game) -> u32 {
         u32::try_from(self.resolve(game).len()).expect("solution count exceeds u32::MAX")
     }
