@@ -40,6 +40,8 @@ jobs:
   web-benchmarks:
     name: Run web benchmarks
     runs-on: ubuntu-latest
+    env:
+      RUNNER_VERSION: '0.4.2'
     steps:
       - uses: actions/checkout@v4
 
