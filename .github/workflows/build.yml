@@ -2,6 +2,10 @@ on: [pull_request]
 
 name: Build
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build_lib:
     name: Build lib
