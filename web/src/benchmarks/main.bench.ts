@@ -41,11 +41,15 @@ bench('resolve_and_render_first_page', async () => {
     // Result pagination is not yet implemented. This benchmark is about getting the initial metrics
     const results = game.resolve();
 
+    // Accumulate total SVG length to ensure the SVG content is actually loaded
+    // and not optimized away by the JavaScript engine
+    let totalSvgLength = 0;
     for (const result of results) {
-        // Note: The SVG property is not used in the benchmark, but it is computed
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const _svg = result.svg;
+        totalSvgLength += result.svg.length;
     }
+    // Use the value to prevent dead code elimination
+    if (totalSvgLength < 0) throw new Error('Unexpected negative SVG length');
+
     // Clean up
     results.forEach(m => m.free());
 });
