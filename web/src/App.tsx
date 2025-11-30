@@ -39,10 +39,31 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     searching: false,
   };
 
+  calculateTotalCells(selectedPieceIds: Set<number>): number {
+    let total = 0;
+    this.state.allPieces.forEach(p => {
+      if (selectedPieceIds.has(p.id)) {
+        total += p.cells;
+      }
+    });
+    return total;
+  }
+
   setPieceSelected(pieceId: number, selected: boolean) {
     if (selected) {
       // Selecting: Add immediately
-      let selectedPieceIds = this.state.selectedPieceIds;
+      let selectedPieceIds = new Set(this.state.selectedPieceIds); // Create a mutable copy
+      // Check if adding this piece would exceed the 64-cell limit
+      const currentCells = this.calculateTotalCells(selectedPieceIds);
+      const piece = this.state.allPieces.find(p => p.id === pieceId);
+      const pieceCells = piece ? piece.cells : 0;
+
+      if (currentCells + pieceCells > 64) {
+        // Ideally show a toast/notification here, but for now just prevent selection
+        console.warn("Cannot select piece: Board would exceed 64 cells.");
+        return;
+      }
+
       selectedPieceIds.add(pieceId);
       // Ensure it's not in closing list (in case of rapid toggling)
       let closingPieceIds = this.state.closingPieceIds;

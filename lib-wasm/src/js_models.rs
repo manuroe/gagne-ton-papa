@@ -36,6 +36,7 @@ pub struct JSPiece {
     pub id: usize,
     pub matrix: JSMatrix,
     pub color: u32,
+    pub cells: u32,
 }
 
 impl JSPiece {
@@ -44,6 +45,7 @@ impl JSPiece {
             id,
             matrix: JSMatrix::new(&(piece.matrix.clone() * piece.color)),
             color: piece.color,
+            cells: piece.cells() as u32,
         }
     }
 }

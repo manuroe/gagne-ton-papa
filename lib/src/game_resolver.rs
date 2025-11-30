@@ -31,17 +31,18 @@ impl GameResolverTrait for GameResolver {
     fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>> {
         let rows = usize::try_from(game.rows()).expect("Row count too large");
         let cols = usize::try_from(game.columns).expect("Column count too large");
-        if !game.is_valid() {
-            return vec![];
-        }
-
-        // Start with an empty board represented as (BitBoard, DMatrix).
-        let empty_board_bits: BitBoard = 0;
+        if rows * cols > 64 {
+            panic!("Board size exceeds 64 cells (rows * cols = {}), which is the limit for the bitboard implementation.", rows * cols);
+        }let empty_board_bits: BitBoard = 0;
         let empty_board_matrix = DMatrix::<u32>::zeros(rows, cols);
         
         // Solutions are stored as (BitBoard, DMatrix) tuples during the search.
         // BitBoard for fast collision detection, DMatrix for preserving colors.
         let mut solutions: Vec<(BitBoard, DMatrix<u32>)> = vec![(empty_board_bits, empty_board_matrix)];
+
+        if !game.is_valid() {
+            return vec![];
+        }
 
         // Order pieces by decreasing cell count (already done in original code).
         let mut piece_indices: Vec<_> = (0..game.pieces.len()).collect();
@@ -164,5 +165,35 @@ mod tests {
         let resolver = GameResolver;
         let solutions = resolver.resolve(&game);
         assert!(solutions.is_empty());
+    }
+
+    #[test]
+    #[should_panic(expected = "Board size exceeds 64 cells")]
+    fn test_resolve_too_large_board() {
+        // 10x7 = 70 cells > 64
+        let p1 = create_piece(1, 1, &[1]);
+        let game = Game {
+            columns: 7,
+            pieces: vec![p1; 10], // 10 pieces of size 1 = 10 cells, but board is 10x7
+        };
+        // Note: Game height is determined by total cells / columns.
+        // Here total cells = 10. 10 / 7 = 1 row (integer division) + remainder.
+        // Wait, the game height logic is inside resolve:
+        // let total_cells = game.cells();
+        // let rows = total_cells / cols;
+        
+        // To trigger the panic, we need total_cells / cols * cols > 64.
+        // Let's use 65 pieces of size 1, and 1 column.
+        // Rows = 65 / 1 = 65.
+        // 65 * 1 = 65 > 64.
+        
+        let p1 = create_piece(1, 1, &[1]);
+        let game = Game {
+            columns: 1,
+            pieces: vec![p1; 65],
+        };
+        
+        let resolver = GameResolver;
+        resolver.resolve(&game);
     }
 }
