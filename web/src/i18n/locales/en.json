@@ -8,5 +8,17 @@
   "foundSolutions_one": "I found {{count}} solution! 🎉",
   "foundSolutions_other": "I found {{count}} solutions! 🎉",
   "sourceCode": "Source code on GitHub",
-  "language": "Language"
+  "language": "Language",
+  "scanWithCamera": "Scan pieces with camera",
+  "cameraError": "Camera Error",
+  "modelLoadError": "Model Load Error",
+  "loadingModel": "Loading AI model...",
+  "back": "Back",
+  "cancel": "Cancel",
+  "detectedPieces_one": "{{count}} piece detected",
+  "detectedPieces_other": "{{count}} pieces detected",
+  "confirmedPieces_one": "{{count}} confirmed",
+  "confirmedPieces_other": "{{count}} confirmed",
+  "usePieces_one": "Use {{count}} piece",
+  "usePieces_other": "Use {{count}} pieces"
 }

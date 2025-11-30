@@ -69,12 +69,40 @@
   width: 100%;
   text-align: left;
   padding-left: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 [dir="rtl"] .section-title {
   text-align: right;
   padding-left: 0;
   padding-right: 10px;
+}
+
+/* Camera Button */
+.camera-button {
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.camera-button:hover {
+  transform: scale(1.1);
+  background-color: var(--secondary-color);
+}
+
+.camera-button:active {
+  transform: scale(0.95);
 }
 
 /* All Pieces Area */

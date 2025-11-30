@@ -6,6 +6,7 @@ import * as gtpLib from 'lib-wasm';
 import MatrixView from './MatrixView';
 import PieceView from './PieceView';
 import LanguageSelector from './LanguageSelector';
+import CameraDetection from './CameraDetection';
 
 
 type AppInnerProps = {
@@ -21,6 +22,7 @@ type AppState = {
   missingCells: number,
   searching: boolean,
   solutions?: gtpLib.JSMatrix[],
+  showCameraDetection: boolean,
 }
 
 class AppInner extends React.Component<AppInnerProps, AppState> {
@@ -28,6 +30,7 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     super(props);
     this.setPieceSelected = this.setPieceSelected.bind(this);
     this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
+    this.handleCameraPiecesConfirmed = this.handleCameraPiecesConfirmed.bind(this);
   }
 
   state: AppState = {
@@ -37,6 +40,7 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     isGameValid: false,
     missingCells: 0,
     searching: false,
+    showCameraDetection: false,
   };
 
   setPieceSelected(pieceId: number, selected: boolean) {
@@ -132,6 +136,19 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     this.setSelectedPieceIds(new Set<number>(), new Set<number>());
   }
 
+  openCameraDetection = () => {
+    this.setState({ showCameraDetection: true });
+  }
+
+  closeCameraDetection = () => {
+    this.setState({ showCameraDetection: false });
+  }
+
+  handleCameraPiecesConfirmed(pieceIds: Set<number>) {
+    this.setState({ showCameraDetection: false });
+    this.setSelectedPieceIds(pieceIds, new Set<number>());
+  }
+
 
 
   renderAllPieces = () => {
@@ -140,6 +157,13 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
       <div id='all-pieces-area'>
         <div className='section-title'>
           {t('choosePieces')}
+          <button 
+            className="camera-button" 
+            onClick={this.openCameraDetection}
+            title={t('scanWithCamera')}
+          >
+            📷
+          </button>
         </div>
 
         {this.state.allPieces.map((piece) => {
@@ -265,6 +289,14 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
             <LanguageSelector />
           </div>
         </footer>
+
+        {this.state.showCameraDetection && (
+          <CameraDetection
+            allPiecesGame={this.props.allPiecesGame}
+            onPiecesConfirmed={this.handleCameraPiecesConfirmed}
+            onClose={this.closeCameraDetection}
+          />
+        )}
       </div>
     );
   }
