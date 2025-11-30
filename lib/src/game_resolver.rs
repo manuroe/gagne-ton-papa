@@ -31,9 +31,8 @@ impl GameResolverTrait for GameResolver {
     fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>> {
         let rows = usize::try_from(game.rows()).expect("Row count too large");
         let cols = usize::try_from(game.columns).expect("Column count too large");
-        if rows * cols > 64 {
-            panic!("Board size exceeds 64 cells (rows * cols = {}), which is the limit for the bitboard implementation.", rows * cols);
-        }let empty_board_bits: BitBoard = 0;
+        assert!(rows * cols <= 64, "Board size exceeds 64 cells (rows * cols = {}), which is the limit for the bitboard implementation.", rows * cols);
+        let empty_board_bits: BitBoard = 0;
         let empty_board_matrix = DMatrix::<u32>::zeros(rows, cols);
         
         // Solutions are stored as (BitBoard, DMatrix) tuples during the search.
