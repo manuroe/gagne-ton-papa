@@ -13,9 +13,8 @@ pub trait GameResolverTrait {
     fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>>;
 
     /// Finds the number of valid solutions for the given game.
-    #[allow(clippy::cast_possible_truncation)]
     fn resolve_count(&self, game: &Game) -> u32 {
-        self.resolve(game).len() as u32
+        u32::try_from(self.resolve(game).len()).expect("solution count exceeds u32::MAX")
     }
     
     /// Generates all unique variants (rotations and reflections) of a piece.
