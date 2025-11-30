@@ -28,6 +28,7 @@ impl JSGame {
     }
 
     // New binding: return only the count of solutions
+    /// Returns the number of valid solutions for this game.
     pub fn resolve_count(&self) -> u32 {
         let resolver = GameResolver {};
         resolver.resolve_count(&self.game)
