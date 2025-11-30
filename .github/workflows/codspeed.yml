@@ -1,5 +1,4 @@
 name: CodSpeed
-
 on:
   push:
     branches:
@@ -15,6 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Rust benchmark
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
@@ -27,9 +27,29 @@ jobs:
         working-directory: lib
         run: cargo codspeed build
 
-      - name: Run the benchmarks
+      - name: Run the Rust benchmarks
         uses: CodSpeedHQ/action@v3
         with:
           working-directory: lib
           run: cargo codspeed run
           token: ${{ secrets.CODSPEED_TOKEN }}
+
+      # Web benchmark
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Build lib-wasm package
+        working-directory: lib-wasm
+        run: wasm-pack build --target web
+
+      - name: Run the web benchmark with CodSpeed
+        working-directory: web
+        run: npm run benchmark
+        env:
+          CODSPEED_TOKEN: ${{ secrets.CODSPEED_TOKEN }}

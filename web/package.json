@@ -25,6 +25,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "benchmark": "vitest bench",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
@@ -45,5 +46,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@codspeed/vitest-plugin": "^5.0.1",
+    "jsdom": "^27.2.0",
+    "vitest": "^4.0.14"
   }
 }
