@@ -105,6 +105,32 @@
   transform: scale(0.95);
 }
 
+/* Demo buttons for testing */
+.demo-buttons {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.demo-button {
+  padding: 8px 16px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.demo-button:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+
 /* All Pieces Area */
 #all-pieces-area {
   background-color: var(--card-bg);

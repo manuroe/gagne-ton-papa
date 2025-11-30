@@ -23,7 +23,16 @@ type AppState = {
   searching: boolean,
   solutions?: gtpLib.JSMatrix[],
   showCameraDetection: boolean,
+  demoImageUrl?: string, // Optional demo image URL for testing
 }
+
+// Demo image URLs for testing camera detection
+const DEMO_IMAGES = [
+  '/gagne-ton-papa/test-images/camera-pieces-horizontal.jpeg',
+  '/gagne-ton-papa/test-images/camera-pieces-vertical.jpeg',
+  '/gagne-ton-papa/test-images/camera-oblique.jpeg',
+  '/gagne-ton-papa/test-images/camera-card.jpeg',
+];
 
 class AppInner extends React.Component<AppInnerProps, AppState> {
   constructor(props: AppInnerProps) {
@@ -41,6 +50,7 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     missingCells: 0,
     searching: false,
     showCameraDetection: false,
+    demoImageUrl: undefined,
   };
 
   setPieceSelected(pieceId: number, selected: boolean) {
@@ -137,15 +147,19 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
   }
 
   openCameraDetection = () => {
-    this.setState({ showCameraDetection: true });
+    this.setState({ showCameraDetection: true, demoImageUrl: undefined });
+  }
+
+  openDemoDetection = (imageUrl: string) => {
+    this.setState({ showCameraDetection: true, demoImageUrl: imageUrl });
   }
 
   closeCameraDetection = () => {
-    this.setState({ showCameraDetection: false });
+    this.setState({ showCameraDetection: false, demoImageUrl: undefined });
   }
 
   handleCameraPiecesConfirmed(pieceIds: Set<number>) {
-    this.setState({ showCameraDetection: false });
+    this.setState({ showCameraDetection: false, demoImageUrl: undefined });
     this.setSelectedPieceIds(pieceIds, new Set<number>());
   }
 
@@ -153,6 +167,10 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
 
   renderAllPieces = () => {
     const { t } = this.props;
+    // Check if URL has demo query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const showDemoLinks = urlParams.get('demo') === 'true';
+    
     return (
       <div id='all-pieces-area'>
         <div className='section-title'>
@@ -165,6 +183,21 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
             📷
           </button>
         </div>
+
+        {/* Demo buttons - shown when ?demo=true is in URL */}
+        {showDemoLinks && (
+          <div className="demo-buttons">
+            {DEMO_IMAGES.map((imageUrl, index) => (
+              <button
+                key={imageUrl}
+                className="demo-button"
+                onClick={() => this.openDemoDetection(imageUrl)}
+              >
+                Demo {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
 
         {this.state.allPieces.map((piece) => {
           let isPieceSelected = this.state.selectedPieceIds.has(piece.id);
@@ -295,6 +328,7 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
             allPiecesGame={this.props.allPiecesGame}
             onPiecesConfirmed={this.handleCameraPiecesConfirmed}
             onClose={this.closeCameraDetection}
+            demoImageUrl={this.state.demoImageUrl}
           />
         )}
       </div>

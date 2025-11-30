@@ -44,6 +44,7 @@ type Props = {
   allPiecesGame: gtpLib.JSGame;
   onPiecesConfirmed: (pieceIds: Set<number>) => void;
   onClose: () => void;
+  demoImageUrl?: string; // Optional: URL of a demo image to use instead of camera
 };
 
 // Constants for battery optimization
@@ -62,10 +63,11 @@ const NMS_IOU_THRESHOLD = 0.45;
 const YOLO_BOX_COORDINATES_COUNT = 4; // (cx, cy, w, h) for YOLOv8 or (x1, y1, x2, y2) for alternative format
 const YOLO_DETECTION_FIELDS_COUNT = 6; // (x1, y1, x2, y2, confidence, class) for alternative format
 
-export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onClose }: Props) {
+export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onClose, demoImageUrl }: Props) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const [isModelLoading, setIsModelLoading] = useState(true);
   const [modelLoadError, setModelLoadError] = useState<string | null>(null);
   const [session, setSession] = useState<ort.InferenceSession | null>(null);
@@ -74,8 +76,12 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
   const [confirmedPieceIds, setConfirmedPieceIds] = useState<Set<number>>(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
   const [videoDimensions, setVideoDimensions] = useState({ width: 0, height: 0 });
+  const [demoImageLoaded, setDemoImageLoaded] = useState(false);
   const animationFrameRef = useRef<number | null>(null);
   const lastDetectionTimeRef = useRef<number>(0);
+  
+  // Determine if we're in demo mode based on whether demoImageUrl is provided
+  const isDemoMode = !!demoImageUrl;
 
   // Load ONNX model
   useEffect(() => {
@@ -107,8 +113,13 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
     loadModel();
   }, []);
 
-  // Initialize camera
+  // Initialize camera or demo image
   useEffect(() => {
+    // Skip camera if in demo mode
+    if (isDemoMode) {
+      return;
+    }
+
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -139,6 +150,17 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
         stream.getTracks().forEach(track => track.stop());
       }
     };
+  }, [isDemoMode]);
+
+  // Handle demo image load
+  const handleDemoImageLoad = useCallback(() => {
+    if (imageRef.current) {
+      setVideoDimensions({
+        width: imageRef.current.naturalWidth,
+        height: imageRef.current.naturalHeight,
+      });
+      setDemoImageLoaded(true);
+    }
   }, []);
 
   // Handle video metadata loaded to get dimensions
@@ -152,15 +174,19 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
   }, []);
 
   // Preprocess image for YOLO model
-  const preprocessImage = useCallback((video: HTMLVideoElement, canvas: HTMLCanvasElement): Float32Array => {
+  const preprocessImage = useCallback((source: HTMLVideoElement | HTMLImageElement, canvas: HTMLCanvasElement): Float32Array => {
     const ctx = canvas.getContext('2d')!;
     canvas.width = MODEL_INPUT_SIZE;
     canvas.height = MODEL_INPUT_SIZE;
     
+    // Get source dimensions
+    const sourceWidth = source instanceof HTMLVideoElement ? source.videoWidth : source.naturalWidth;
+    const sourceHeight = source instanceof HTMLVideoElement ? source.videoHeight : source.naturalHeight;
+    
     // Calculate scaling to maintain aspect ratio
-    const scale = Math.min(MODEL_INPUT_SIZE / video.videoWidth, MODEL_INPUT_SIZE / video.videoHeight);
-    const scaledWidth = video.videoWidth * scale;
-    const scaledHeight = video.videoHeight * scale;
+    const scale = Math.min(MODEL_INPUT_SIZE / sourceWidth, MODEL_INPUT_SIZE / sourceHeight);
+    const scaledWidth = sourceWidth * scale;
+    const scaledHeight = sourceHeight * scale;
     const offsetX = (MODEL_INPUT_SIZE - scaledWidth) / 2;
     const offsetY = (MODEL_INPUT_SIZE - scaledHeight) / 2;
     
@@ -169,7 +195,7 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
     ctx.fillRect(0, 0, MODEL_INPUT_SIZE, MODEL_INPUT_SIZE);
     
     // Draw scaled image
-    ctx.drawImage(video, offsetX, offsetY, scaledWidth, scaledHeight);
+    ctx.drawImage(source, offsetX, offsetY, scaledWidth, scaledHeight);
     
     const imageData = ctx.getImageData(0, 0, MODEL_INPUT_SIZE, MODEL_INPUT_SIZE);
     const data = imageData.data;
@@ -214,7 +240,15 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
 
   // Run detection
   const runDetection = useCallback(async () => {
-    if (!session || !videoRef.current || !canvasRef.current || isProcessing) {
+    // Determine the source (video or demo image)
+    const source = isDemoMode ? imageRef.current : videoRef.current;
+    
+    if (!session || !source || !canvasRef.current || isProcessing) {
+      return;
+    }
+    
+    // For demo mode, only run once when image is loaded
+    if (isDemoMode && !demoImageLoaded) {
       return;
     }
     
@@ -227,11 +261,14 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
     try {
       setIsProcessing(true);
       
-      const video = videoRef.current;
       const canvas = canvasRef.current;
       
+      // Get source dimensions
+      const sourceWidth = source instanceof HTMLVideoElement ? source.videoWidth : source.naturalWidth;
+      const sourceHeight = source instanceof HTMLVideoElement ? source.videoHeight : source.naturalHeight;
+      
       // Preprocess
-      const inputData = preprocessImage(video, canvas);
+      const inputData = preprocessImage(source, canvas);
       const tensor = new ort.Tensor('float32', inputData, [1, 3, MODEL_INPUT_SIZE, MODEL_INPUT_SIZE]);
       
       // Run inference
@@ -246,9 +283,9 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
       const newDetections: Detection[] = [];
       
       // Calculate scale factors for letterboxed coordinates to original image coordinates
-      const scale = Math.min(MODEL_INPUT_SIZE / video.videoWidth, MODEL_INPUT_SIZE / video.videoHeight);
-      const offsetX = (MODEL_INPUT_SIZE - video.videoWidth * scale) / 2;
-      const offsetY = (MODEL_INPUT_SIZE - video.videoHeight * scale) / 2;
+      const scale = Math.min(MODEL_INPUT_SIZE / sourceWidth, MODEL_INPUT_SIZE / sourceHeight);
+      const offsetX = (MODEL_INPUT_SIZE - sourceWidth * scale) / 2;
+      const offsetY = (MODEL_INPUT_SIZE - sourceHeight * scale) / 2;
       
       // Handle different YOLO output formats
       if (outputDims.length === 3 && outputDims[1] === 84) {
@@ -332,11 +369,19 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
     } finally {
       setIsProcessing(false);
     }
-  }, [session, isProcessing, preprocessImage, nonMaxSuppression]);
+  }, [session, isProcessing, preprocessImage, nonMaxSuppression, isDemoMode, demoImageLoaded]);
 
   // Detection loop
   useEffect(() => {
     if (!session || isModelLoading) return;
+    
+    // For demo mode, run detection once when image is loaded
+    if (isDemoMode) {
+      if (demoImageLoaded) {
+        runDetection();
+      }
+      return;
+    }
     
     const loop = () => {
       runDetection();
@@ -350,7 +395,7 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [session, isModelLoading, runDetection]);
+  }, [session, isModelLoading, runDetection, isDemoMode, demoImageLoaded]);
 
   // Toggle piece confirmation
   const togglePieceConfirmation = useCallback((pieceId: number) => {
@@ -387,12 +432,12 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
       const piece = getPiece(detection.pieceId);
       if (!piece) return null;
       
-      // Calculate position and scale relative to video display
-      const videoElement = videoRef.current;
-      if (!videoElement) return null;
+      // Calculate position and scale relative to video/image display
+      const displayElement = isDemoMode ? imageRef.current : videoRef.current;
+      if (!displayElement) return null;
       
-      const displayWidth = videoElement.clientWidth;
-      const displayHeight = videoElement.clientHeight;
+      const displayWidth = displayElement.clientWidth;
+      const displayHeight = displayElement.clientHeight;
       const scaleX = displayWidth / videoDimensions.width;
       const scaleY = displayHeight / videoDimensions.height;
       
@@ -442,7 +487,8 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
   // Get unique detected piece IDs
   const detectedPieceIds = new Set(detections.map(d => d.pieceId));
 
-  if (cameraError) {
+  // Only show camera error in non-demo mode
+  if (cameraError && !isDemoMode) {
     return (
       <div className="camera-detection-container">
         <div className="camera-error">
@@ -469,14 +515,24 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
   return (
     <div className="camera-detection-container">
       <div className="camera-view-wrapper">
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="camera-video"
-          onLoadedMetadata={handleVideoMetadata}
-        />
+        {isDemoMode ? (
+          <img
+            ref={imageRef}
+            src={demoImageUrl}
+            alt="Demo detection view"
+            className="camera-video"
+            onLoad={handleDemoImageLoad}
+          />
+        ) : (
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="camera-video"
+            onLoadedMetadata={handleVideoMetadata}
+          />
+        )}
         <canvas ref={canvasRef} style={{ display: 'none' }} />
         
         {isModelLoading && (
