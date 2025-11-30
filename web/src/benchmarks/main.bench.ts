@@ -47,8 +47,10 @@ bench('resolve_and_render_first_page', async () => {
     for (const result of results) {
         totalSvgLength += result.svg.length;
     }
-    // Use the value to prevent dead code elimination
-    if (totalSvgLength < 0) throw new Error('Unexpected negative SVG length');
+    // Validate to detect unexpected empty SVG content and prevent dead code elimination
+    if (totalSvgLength === 0 && results.length > 0) {
+        throw new Error('Unexpected empty SVG content');
+    }
 
     // Clean up
     results.forEach(m => m.free());
