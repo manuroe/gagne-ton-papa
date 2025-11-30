@@ -58,6 +58,10 @@ const MODEL_INPUT_SIZE = 640;
 const CONFIDENCE_THRESHOLD = 0.5;
 const NMS_IOU_THRESHOLD = 0.45;
 
+// YOLO output format constants
+const YOLO_BOX_COORDINATES_COUNT = 4; // (cx, cy, w, h) for YOLOv8 or (x1, y1, x2, y2) for alternative format
+const YOLO_DETECTION_FIELDS_COUNT = 6; // (x1, y1, x2, y2, confidence, class) for alternative format
+
 export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onClose }: Props) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -253,17 +257,17 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
         const numPredictions = outputDims[2] as number;
         
         for (let i = 0; i < numPredictions; i++) {
-          // Get box coordinates (first 4 values)
+          // Get box coordinates (first YOLO_BOX_COORDINATES_COUNT values: cx, cy, w, h)
           const cx = outputData[0 * numPredictions + i];
           const cy = outputData[1 * numPredictions + i];
           const w = outputData[2 * numPredictions + i];
           const h = outputData[3 * numPredictions + i];
           
-          // Get class confidences (next 16 values starting at index 4)
+          // Get class confidences (next numClasses values starting at index YOLO_BOX_COORDINATES_COUNT)
           let maxConf = 0;
           let maxClassId = 0;
           for (let c = 0; c < numClasses; c++) {
-            const conf = outputData[(4 + c) * numPredictions + i];
+            const conf = outputData[(YOLO_BOX_COORDINATES_COUNT + c) * numPredictions + i];
             if (conf > maxConf) {
               maxConf = conf;
               maxClassId = c;
@@ -291,11 +295,11 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
           }
         }
       } else if (outputDims.length === 3) {
-        // Alternative format: [1, num_detections, 6] - (x1, y1, x2, y2, confidence, class)
+        // Alternative format: [1, num_detections, YOLO_DETECTION_FIELDS_COUNT] - (x1, y1, x2, y2, confidence, class)
         const numDetections = outputDims[1] as number;
         
         for (let i = 0; i < numDetections; i++) {
-          const offset = i * 6;
+          const offset = i * YOLO_DETECTION_FIELDS_COUNT;
           const x1 = (outputData[offset] - offsetX) / scale;
           const y1 = (outputData[offset + 1] - offsetY) / scale;
           const x2 = (outputData[offset + 2] - offsetX) / scale;
@@ -397,7 +401,10 @@ export default function CameraDetection({ allPiecesGame, onPiecesConfirmed, onCl
       const width = detection.bbox.width * scaleX;
       const height = detection.bbox.height * scaleY;
       
-      // Calculate rotation based on aspect ratio
+      // Calculate rotation based on bounding box aspect ratio.
+      // This is a simple heuristic: if the bounding box is taller than wide (aspect < 1),
+      // we rotate the piece 90 degrees to better fit the detected orientation.
+      // Note: This assumes pieces have a natural horizontal orientation in their SVG representation.
       const aspectRatio = detection.bbox.width / detection.bbox.height;
       const rotation = aspectRatio < 1 ? 90 : 0;
       
