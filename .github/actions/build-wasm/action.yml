@@ -1,0 +1,29 @@
+name: "Build WASM Package"
+description: "Install wasm-pack, restore cache, build lib-wasm, and upload artifact"
+runs:
+  using: "composite"
+  steps:
+    - uses: dtolnay/rust-toolchain@stable
+    - name: Install wasm-pack
+      uses: taiki-e/install-action@v2
+      with:
+        tool: wasm-pack
+    - name: Restore lib-wasm cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          lib-wasm/pkg
+          lib-wasm/target
+        key: lib-wasm-${{ runner.os }}-${{ hashFiles('lib-wasm/Cargo.lock') }}-${{ hashFiles('lib-wasm/src/**') }}
+        restore-keys: |
+          lib-wasm-${{ runner.os }}-${{ hashFiles('lib-wasm/Cargo.lock') }}-
+          lib-wasm-${{ runner.os }}-
+    - name: Build lib-wasm package
+      shell: bash
+      working-directory: lib-wasm
+      run: wasm-pack build --target web
+    - name: Upload lib-wasm pkg artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.WASM_ARTIFACT_NAME }}
+        path: lib-wasm/pkg

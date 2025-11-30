@@ -15,10 +15,13 @@ jobs:
     name: Test lib
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
         with:
-          toolchain: stable
+          workspaces: |
+            lib
       - uses: actions-rs/cargo@v1
         with:
           command: test

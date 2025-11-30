@@ -12,6 +12,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build_wasm:
+    name: Build lib-wasm artifact
+    runs-on: ubuntu-latest
+    env:
+      WASM_ARTIFACT_NAME: lib-wasm-pkg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-wasm
+
   rust-benchmarks:
     name: Run Rust benchmarks
     runs-on: ubuntu-latest
@@ -20,6 +29,12 @@ jobs:
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            lib
 
       - name: Install cargo-codspeed
         uses: taiki-e/install-action@v2
@@ -42,6 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RUNNER_VERSION: '0.4.2'
+    needs: build_wasm
     steps:
       - uses: actions/checkout@v4
 
@@ -49,17 +65,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'web/package-lock.json'
 
       - name: Install web dependencies
         working-directory: web
         run: npm ci --legacy-peer-deps
 
-      - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-
-      - name: Build lib-wasm package
-        working-directory: lib-wasm
-        run: wasm-pack build --target web
+      - name: Download lib-wasm pkg artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lib-wasm-pkg
+          path: lib-wasm/pkg
+      - name: Validate lib-wasm pkg
+        run: |
+          ls -la lib-wasm/pkg
+          test -f lib-wasm/pkg/lib_wasm_bg.wasm
 
       - name: Run the web benchmark with CodSpeed
         uses: CodSpeedHQ/action@v3

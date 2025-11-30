@@ -11,26 +11,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build_wasm:
+    name: Build lib-wasm artifact
+    runs-on: ubuntu-latest
+    env:
+      WASM_ARTIFACT_NAME: lib-wasm-pkg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-wasm
+
   web_lint:
     name: Web Lint
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./web
+    needs: build_wasm
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js 16
-        uses: actions/setup-node@v1
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'web/package-lock.json'
 
-      - name: Build lib-wasm
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      
-      - name: Build wasm package
-        working-directory: ./lib-wasm
-        run: wasm-pack build --target web
+      - name: Download lib-wasm pkg artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lib-wasm-pkg
+          path: lib-wasm/pkg
+      - name: Validate lib-wasm pkg
+        run: |
+          ls -la lib-wasm/pkg
+          test -f lib-wasm/pkg/lib_wasm_bg.wasm
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps

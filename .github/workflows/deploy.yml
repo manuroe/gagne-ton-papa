@@ -8,7 +8,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  WASM_ARTIFACT_NAME: lib-wasm-pkg
+
 jobs:
+  build_wasm:
+    name: Build lib-wasm artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-wasm
+
   deploy:
     name: Deploy web
     runs-on: ubuntu-latest
@@ -17,19 +27,27 @@ jobs:
         working-directory: ./web
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [20.x]
+    needs: build_wasm
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: 'web/package-lock.json'
 
-      - name: Build lib-wasm
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - working-directory: ./lib-wasm
-        run: wasm-pack build --target web
+      - name: Download lib-wasm pkg artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.WASM_ARTIFACT_NAME }}
+          path: lib-wasm/pkg
+      - name: Validate lib-wasm pkg
+        run: |
+          ls -la lib-wasm/pkg
+          test -f lib-wasm/pkg/lib_wasm_bg.wasm
 
       - name: Install Packages
         run: npm ci --legacy-peer-deps
