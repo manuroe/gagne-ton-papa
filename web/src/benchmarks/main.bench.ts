@@ -23,3 +23,15 @@ bench('resolve_full_results', () => {
 bench('resolve_count_only', () => {
     game.resolve_count();
 });
+
+bench('resolve_and_render_first_page', () => {
+    // Result pagination is not yet implemented. This benchmark is about getting the initial metrics
+    const results = game.resolve();
+
+    // Note: The SVG property is not used in the benchmark, but it is computed
+    for (let result of results) {
+        const _svg = result.svg;
+    }
+    // Clean up
+    results.forEach(m => m.free());
+});
