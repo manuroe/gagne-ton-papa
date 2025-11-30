@@ -8,13 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  benchmarks:
-    name: Run benchmarks
+  rust-benchmarks:
+    name: Run Rust benchmarks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Rust benchmark
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
@@ -34,7 +33,12 @@ jobs:
           run: cargo codspeed run
           token: ${{ secrets.CODSPEED_TOKEN }}
 
-      # Web benchmark
+  web-benchmarks:
+    name: Run web benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
