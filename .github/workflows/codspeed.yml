@@ -86,5 +86,5 @@ jobs:
       - name: Run the web benchmark with CodSpeed
         uses: CodSpeedHQ/action@v3
         with:
-          run: cd web && npm run benchmark
+          run: npm run benchmark --prefix web
           token: ${{ secrets.CODSPEED_TOKEN }}
