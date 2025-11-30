@@ -6,6 +6,7 @@ import * as gtpLib from 'lib-wasm';
 import MatrixView from './MatrixView';
 import PieceView from './PieceView';
 import LanguageSelector from './LanguageSelector';
+import CameraDetection from './CameraDetection';
 
 
 type AppInnerProps = {
@@ -21,13 +22,24 @@ type AppState = {
   missingCells: number,
   searching: boolean,
   solutions?: gtpLib.JSMatrix[],
+  showCameraDetection: boolean,
+  demoImageUrl?: string, // Optional demo image URL for testing
 }
+
+// Demo image URLs for testing camera detection
+const DEMO_IMAGES = [
+  '/gagne-ton-papa/test-images/camera-pieces-horizontal.jpeg',
+  '/gagne-ton-papa/test-images/camera-pieces-vertical.jpeg',
+  '/gagne-ton-papa/test-images/camera-oblique.jpeg',
+  '/gagne-ton-papa/test-images/camera-card.jpeg',
+];
 
 class AppInner extends React.Component<AppInnerProps, AppState> {
   constructor(props: AppInnerProps) {
     super(props);
     this.setPieceSelected = this.setPieceSelected.bind(this);
     this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
+    this.handleCameraPiecesConfirmed = this.handleCameraPiecesConfirmed.bind(this);
   }
 
   state: AppState = {
@@ -37,6 +49,8 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     isGameValid: false,
     missingCells: 0,
     searching: false,
+    showCameraDetection: false,
+    demoImageUrl: undefined,
   };
 
   setPieceSelected(pieceId: number, selected: boolean) {
@@ -132,15 +146,58 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     this.setSelectedPieceIds(new Set<number>(), new Set<number>());
   }
 
+  openCameraDetection = () => {
+    this.setState({ showCameraDetection: true, demoImageUrl: undefined });
+  }
+
+  openDemoDetection = (imageUrl: string) => {
+    this.setState({ showCameraDetection: true, demoImageUrl: imageUrl });
+  }
+
+  closeCameraDetection = () => {
+    this.setState({ showCameraDetection: false, demoImageUrl: undefined });
+  }
+
+  handleCameraPiecesConfirmed(pieceIds: Set<number>) {
+    this.setState({ showCameraDetection: false, demoImageUrl: undefined });
+    this.setSelectedPieceIds(pieceIds, new Set<number>());
+  }
+
 
 
   renderAllPieces = () => {
     const { t } = this.props;
+    // Check if URL has demo query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const showDemoLinks = urlParams.get('demo') === 'true';
+    
     return (
       <div id='all-pieces-area'>
         <div className='section-title'>
           {t('choosePieces')}
+          <button 
+            className="camera-button" 
+            onClick={this.openCameraDetection}
+            title={t('scanWithCamera')}
+          >
+            📷
+          </button>
         </div>
+
+        {/* Demo buttons - shown when ?demo=true is in URL */}
+        {showDemoLinks && (
+          <div className="demo-buttons">
+            {DEMO_IMAGES.map((imageUrl, index) => (
+              <button
+                key={imageUrl}
+                className="demo-button"
+                onClick={() => this.openDemoDetection(imageUrl)}
+              >
+                Demo {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
 
         {this.state.allPieces.map((piece) => {
           let isPieceSelected = this.state.selectedPieceIds.has(piece.id);
@@ -265,6 +322,15 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
             <LanguageSelector />
           </div>
         </footer>
+
+        {this.state.showCameraDetection && (
+          <CameraDetection
+            allPiecesGame={this.props.allPiecesGame}
+            onPiecesConfirmed={this.handleCameraPiecesConfirmed}
+            onClose={this.closeCameraDetection}
+            demoImageUrl={this.state.demoImageUrl}
+          />
+        )}
       </div>
     );
   }

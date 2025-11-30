@@ -8,5 +8,17 @@
   "foundSolutions_one": "J'ai trouvé {{count}} solution ! 🎉",
   "foundSolutions_other": "J'ai trouvé {{count}} solutions ! 🎉",
   "sourceCode": "Code source sur GitHub",
-  "language": "Langue"
+  "language": "Langue",
+  "scanWithCamera": "Scanner les pièces avec l'appareil photo",
+  "cameraError": "Erreur Caméra",
+  "modelLoadError": "Erreur de chargement du modèle",
+  "loadingModel": "Chargement du modèle IA...",
+  "back": "Retour",
+  "cancel": "Annuler",
+  "detectedPieces_one": "{{count}} pièce détectée",
+  "detectedPieces_other": "{{count}} pièces détectées",
+  "confirmedPieces_one": "{{count}} confirmée",
+  "confirmedPieces_other": "{{count}} confirmées",
+  "usePieces_one": "Utiliser {{count}} pièce",
+  "usePieces_other": "Utiliser {{count}} pièces"
 }

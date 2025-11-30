@@ -21,3 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# ML model files (downloaded at build time)
+/public/models/
+
+# ONNX Runtime WASM files (copied from node_modules)
+/public/*.wasm
+/public/*.mjs
