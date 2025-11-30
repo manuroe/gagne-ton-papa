@@ -26,9 +26,7 @@ const initPromise = (async () => {
 
 bench('resolve_full_results', async () => {
     await initPromise;
-    const results = game.resolve();
-    // Clean up WASM memory for the returned objects
-    results.forEach(m => m.free());
+    game.resolve();
 });
 
 bench('resolve_count_only', async () => {
@@ -51,7 +49,4 @@ bench('resolve_and_render_first_page', async () => {
     if (totalSvgLength === 0 && results.length > 0) {
         throw new Error('Unexpected empty SVG content');
     }
-
-    // Clean up
-    results.forEach(m => m.free());
 });
