@@ -26,9 +26,7 @@ const initPromise = (async () => {
 
 bench('resolve_full_results', async () => {
     await initPromise;
-    const results = game.resolve();
-    // Clean up WASM memory for the returned objects
-    results.forEach(m => m.free());
+    game.resolve();
 });
 
 bench('resolve_count_only', async () => {
@@ -46,6 +44,4 @@ bench('resolve_and_render_first_page', async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const _svg = result.svg;
     }
-    // Clean up
-    results.forEach(m => m.free());
 });
