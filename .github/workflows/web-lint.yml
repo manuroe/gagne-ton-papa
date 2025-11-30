@@ -43,6 +43,7 @@ jobs:
           name: lib-wasm-pkg
           path: lib-wasm/pkg
       - name: Validate lib-wasm pkg
+        working-directory: .
         run: |
           ls -la lib-wasm/pkg
           test -f lib-wasm/pkg/lib_wasm_bg.wasm
