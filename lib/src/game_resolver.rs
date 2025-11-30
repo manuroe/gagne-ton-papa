@@ -116,9 +116,9 @@ mod tests {
     use crate::models::{Game, Piece};
     use nalgebra::DMatrix;
 
-    fn create_piece(rows: usize, cols: usize, values: Vec<u32>) -> Piece {
+    fn create_piece(rows: usize, cols: usize, values: &[u32]) -> Piece {
         Piece {
-            matrix: DMatrix::from_row_slice(rows, cols, &values),
+            matrix: DMatrix::from_row_slice(rows, cols, values),
             color: 1,
             tui_color: 1,
         }
@@ -130,8 +130,8 @@ mod tests {
         // Piece 1: 1x2 [1, 1]
         // Piece 2: 1x2 [1, 1]
         // Should have solutions.
-        let p1 = create_piece(1, 2, vec![1, 1]);
-        let p2 = create_piece(1, 2, vec![1, 1]);
+        let p1 = create_piece(1, 2, &[1, 1]);
+        let p2 = create_piece(1, 2, &[1, 1]);
         let game = Game {
             columns: 2,
             pieces: vec![p1, p2],
@@ -154,8 +154,8 @@ mod tests {
         // Piece 1: 3x1 [1, 1, 1] - too tall
         // Piece 2: 1x1 [1]
         // Total cells 4, but piece 1 doesn't fit in 2x2.
-        let p1 = create_piece(3, 1, vec![1, 1, 1]);
-        let p2 = create_piece(1, 1, vec![1]);
+        let p1 = create_piece(3, 1, &[1, 1, 1]);
+        let p2 = create_piece(1, 1, &[1]);
         let game = Game {
             columns: 2,
             pieces: vec![p1, p2],

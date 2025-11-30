@@ -103,9 +103,9 @@ mod tests {
     use super::*;
     use nalgebra::DMatrix;
 
-    fn create_piece(rows: usize, cols: usize, values: Vec<u32>) -> Piece {
+    fn create_piece(rows: usize, cols: usize, values: &[u32]) -> Piece {
         Piece {
-            matrix: DMatrix::from_row_slice(rows, cols, &values),
+            matrix: DMatrix::from_row_slice(rows, cols, values),
             color: 0,
             tui_color: 0,
         }
@@ -113,14 +113,14 @@ mod tests {
 
     #[test]
     fn test_piece_cells() {
-        let piece = create_piece(2, 2, vec![1, 0, 1, 1]);
+        let piece = create_piece(2, 2, &[1, 0, 1, 1]);
         assert_eq!(piece.cells(), 3);
     }
 
     #[test]
     fn test_game_is_valid() {
-        let p1 = create_piece(1, 2, vec![1, 1]);
-        let p2 = create_piece(1, 2, vec![1, 1]);
+        let p1 = create_piece(1, 2, &[1, 1]);
+        let p2 = create_piece(1, 2, &[1, 1]);
         let game = Game {
             columns: 2,
             pieces: vec![p1, p2],
@@ -133,7 +133,7 @@ mod tests {
 
     #[test]
     fn test_game_invalid() {
-        let p1 = create_piece(1, 2, vec![1, 1]);
+        let p1 = create_piece(1, 2, &[1, 1]);
         let game = Game {
             columns: 2,
             pieces: vec![p1],
@@ -143,8 +143,8 @@ mod tests {
 
     #[test]
     fn test_game_missing_cells() {
-        let p1 = create_piece(1, 2, vec![1, 1]);
-        let p2 = create_piece(1, 1, vec![1]);
+        let p1 = create_piece(1, 2, &[1, 1]);
+        let p2 = create_piece(1, 1, &[1]);
         let game = Game {
             columns: 2,
             pieces: vec![p1, p2],
@@ -159,11 +159,11 @@ mod tests {
 
     #[test]
     fn test_game_from_game() {
-        let p1 = create_piece(1, 1, vec![1]);
-        let p2 = create_piece(1, 1, vec![1]);
+        let p1 = create_piece(1, 1, &[1]);
+        let p2 = create_piece(1, 1, &[1]);
         let game = Game {
             columns: 2,
-            pieces: vec![p1.clone(), p2.clone()],
+            pieces: vec![p1, p2],
         };
         
         let sub_game = Game::game_from_game(&game, vec![0]);

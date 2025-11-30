@@ -7,7 +7,7 @@ use nalgebra::DMatrix;
 
 pub type BitBoard = u64;
 
-/// Convert a piece matrix (with its color already multiplied) into a BitBoard positioned at (offset_row, offset_col).
+/// Convert a piece matrix (with its color already multiplied) into a `BitBoard` positioned at (`offset_row`, `offset_col`).
 pub fn matrix_to_bitboard(
     matrix: &DMatrix<u32>,
     _board_rows: usize,
@@ -30,7 +30,7 @@ pub fn matrix_to_bitboard(
     bits
 }
 
-/// Convert a BitBoard back into a DMatrix<u32> with the given dimensions.
+/// Convert a `BitBoard` back into a `DMatrix`<u32> with the given dimensions.
 #[allow(dead_code)]
 pub fn bitboard_to_matrix(bits: BitBoard, rows: usize, cols: usize) -> DMatrix<u32> {
     let mut mat = DMatrix::<u32>::zeros(rows, cols);
