@@ -12,8 +12,29 @@ jobs:
   benchmarks:
     name: Run benchmarks
     runs-on: ubuntu-latest
+    env:
+      # Replace '1.0.0' with a valid release tag from https://github.com/CodSpeedHQ/runner/releases
+      RUNNER_VERSION: '1.0.0'
     steps:
       - uses: actions/checkout@v4
+
+      - name: Debug CodSpeed runner URL
+        run: |
+          echo "RUNNER_VERSION=$RUNNER_VERSION"
+          # Prefer the stable release path if RUNNER_VERSION is set; otherwise fallback to 'latest'
+          if [ -z "$RUNNER_VERSION" ]; then
+            url="https://github.com/CodSpeedHQ/runner/releases/latest/download/codspeed-runner-installer.sh"
+          else
+            url="https://github.com/CodSpeedHQ/runner/releases/download/v$RUNNER_VERSION/codspeed-runner-installer.sh"
+          fi
+          echo "Checking $url"
+          status=$(curl -I -fsSL -w "%{http_code}" -o /dev/null "$url" || echo "000")
+          echo "HTTP status: $status"
+          if [ "$status" != "200" ]; then
+            echo "ERROR: codspeed runner installer not available at $url"
+            echo "Please pick a valid RUNNER_VERSION from https://github.com/CodSpeedHQ/runner/releases and update .github/workflows/codspeed.yml"
+            exit 1
+          fi
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
