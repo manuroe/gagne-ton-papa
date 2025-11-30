@@ -52,7 +52,8 @@ jobs:
         run: wasm-pack build --target web
 
       - name: Run the web benchmark with CodSpeed
-        working-directory: web
-        run: npm run benchmark
-        env:
-          CODSPEED_TOKEN: ${{ secrets.CODSPEED_TOKEN }}
+        uses: CodSpeedHQ/action@v3
+        with:
+          working-directory: web
+          run: npm run benchmark
+          token: ${{ secrets.CODSPEED_TOKEN }}
