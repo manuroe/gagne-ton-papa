@@ -169,18 +169,6 @@ mod tests {
     #[test]
     #[should_panic(expected = "Board size exceeds 64 cells")]
     fn test_resolve_too_large_board() {
-        // 10x7 = 70 cells > 64
-        let p1 = create_piece(1, 1, &[1]);
-        let game = Game {
-            columns: 7,
-            pieces: vec![p1; 10], // 10 pieces of size 1 = 10 cells, but board is 10x7
-        };
-        // Note: Game height is determined by total cells / columns.
-        // Here total cells = 10. 10 / 7 = 1 row (integer division) + remainder.
-        // Wait, the game height logic is inside resolve:
-        // let total_cells = game.cells();
-        // let rows = total_cells / cols;
-        
         // To trigger the panic, we need total_cells / cols * cols > 64.
         // Let's use 65 pieces of size 1, and 1 column.
         // Rows = 65 / 1 = 65.

@@ -84,3 +84,80 @@ pub fn generate_positions(
     }
     positions
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nalgebra::DMatrix;
+    use crate::models::Piece;
+
+    fn create_matrix(rows: usize, cols: usize, values: &[u32]) -> DMatrix<u32> {
+        DMatrix::from_row_slice(rows, cols, values)
+    }
+
+    #[test]
+    fn test_matrix_to_bitboard() {
+        // 3x3 board
+        // Matrix: 1x2 [1, 1] at (1, 1)
+        // Board indices:
+        // 0 1 2
+        // 3 4 5
+        // 6 7 8
+        // Placed at (1, 1) occupies (1,1) -> 4 and (1,2) -> 5.
+        // Bitboard should have bits 4 and 5 set.
+        let matrix = create_matrix(1, 2, &[1, 1]);
+        let bits = matrix_to_bitboard(&matrix, 3, 3, 1, 1);
+        
+        let expected = (1u64 << 4) | (1u64 << 5);
+        assert_eq!(bits, expected);
+    }
+
+    #[test]
+    fn test_bitboard_to_matrix() {
+        // Bits 4 and 5 set on 3x3 board
+        let bits = (1u64 << 4) | (1u64 << 5);
+        let matrix = bitboard_to_matrix(bits, 3, 3);
+        
+        assert_eq!(matrix[(1, 1)], 1);
+        assert_eq!(matrix[(1, 2)], 1);
+        assert_eq!(matrix[(0, 0)], 0);
+        assert_eq!(matrix.nrows(), 3);
+        assert_eq!(matrix.ncols(), 3);
+    }
+
+    #[test]
+    fn test_generate_positions() {
+        // 2x2 board
+        // Piece: 1x1 [1]
+        // Should have 4 positions: (0,0), (0,1), (1,0), (1,1)
+        let piece = Piece {
+            matrix: create_matrix(1, 1, &[1]),
+            color: 0xFF0000,
+            tui_color: 0,
+        };
+        
+        let positions = generate_positions(&piece, 2, 2);
+        assert_eq!(positions.len(), 4);
+        
+        // Check first position (0,0) -> bit 0
+        let (bits, mat) = &positions[0];
+        assert_eq!(*bits, 1u64 << 0);
+        assert_eq!(mat[(0, 0)], 0xFF0000);
+    }
+
+    #[test]
+    fn test_generate_positions_large_piece() {
+        // 2x2 board
+        // Piece: 3x3 [1...] - too big
+        // Should return empty
+        let piece = Piece {
+            matrix: create_matrix(3, 3, &[1; 9]),
+            color: 0,
+            tui_color: 0,
+        };
+        
+        let positions = generate_positions(&piece, 2, 2);
+        assert!(positions.is_empty());
+    }
+}
