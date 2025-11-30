@@ -1,7 +1,7 @@
 // Bitboard utilities for Gagne Ton Papa solver
 // Supports boards up to 11x11 (128 bits) which is sufficient for current puzzles.
 // The board is stored as a u128 where bit i corresponds to cell (row, col)
-// i = row * board_cols + col (row‑major order).
+// i = row * board_cols + col (row-major order).
 
 use nalgebra::DMatrix;
 
