@@ -38,7 +38,7 @@ pub fn bitboard_to_matrix(bits: BitBoard, rows: usize, cols: usize) -> DMatrix<u
         if (bits >> idx) & 1 == 1 {
             let r = idx / cols;
             let c = idx % cols;
-            mat[(r, c)] = 1; // we only need a non‑zero marker; original color is stored elsewhere
+            mat[(r, c)] = 1; // we only need a non-zero marker; original color is stored elsewhere
         }
     }
     mat
