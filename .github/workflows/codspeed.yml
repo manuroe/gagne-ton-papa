@@ -67,11 +67,8 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: 'web/package-lock.json'
-
-      - name: Install web dependencies
-        working-directory: web
-        run: npm ci --legacy-peer-deps
-
+      # Ensure the local lib-wasm file dependency exists before installing
+      # web dependencies, otherwise npm will fail to resolve it.
       - name: Download lib-wasm pkg artifact
         uses: actions/download-artifact@v4
         with:
@@ -81,6 +78,10 @@ jobs:
         run: |
           ls -la lib-wasm/pkg
           test -f lib-wasm/pkg/lib_wasm_bg.wasm
+
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci --legacy-peer-deps
 
       - name: Run the web benchmark with CodSpeed
         uses: CodSpeedHQ/action@v3

@@ -50,3 +50,6 @@
 - **New Feature**: Plan -> Implement in `lib` -> Expose in `lib-wasm` -> UI in `web`.
 - **Refactor**: Ensure tests pass at every step.
 
+### CI Notes
+- When the web app depends on `lib-wasm` via a local file reference (`lib-wasm": "file:../lib-wasm/pkg"`), ensure CI downloads/builds the `lib-wasm/pkg` artifact before running `npm ci` in `web/`. Otherwise, npm cannot resolve the local dependency and the job fails.
+
