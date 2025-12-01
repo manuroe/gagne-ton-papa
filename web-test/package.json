@@ -9,7 +9,11 @@
   },
   "devDependencies": {
     "@codspeed/vitest-plugin": "^3.1.1",
+    "@types/node": "^24.10.1",
     "typescript": "^5.3.3",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "lib-wasm": "file:../lib-wasm/pkg"
   }
 }

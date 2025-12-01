@@ -31,6 +31,7 @@ npm run bench
 ### Source Code
 - `src/fibonacci.ts` - Simple recursive Fibonacci implementation (from tutorial)
 - `src/fibonacci.bench.ts` - Benchmark tests for the Fibonacci function
+- `src/game-solver.bench.ts` - Benchmark for the game solver using WASM (mirrors Rust benchmark)
 
 ### Configuration
 - `vitest.config.ts` - Vitest configuration with CodSpeed plugin
