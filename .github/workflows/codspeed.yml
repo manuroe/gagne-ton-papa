@@ -62,10 +62,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v3
         with:
-          node-version: '25'
-          cache: 'npm'
           cache-dependency-path: 'web/package-lock.json'
       # Ensure the local lib-wasm file dependency exists before installing
       # web dependencies, otherwise npm will fail to resolve it.
@@ -87,5 +85,6 @@ jobs:
         uses: CodSpeedHQ/action@v4
         with:
           mode: simulation
-          run: npm run benchmark --prefix web
+          run: npx vitest bench
+          working-directory: web
           token: ${{ secrets.CODSPEED_TOKEN }}
