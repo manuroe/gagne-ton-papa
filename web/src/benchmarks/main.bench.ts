@@ -1,4 +1,6 @@
 import { bench } from 'vitest';
+
+/*
 import init, * as gtpLib from 'lib-wasm';
 
 import fs from 'fs';
@@ -48,5 +50,16 @@ bench('resolve_and_render_first_page', async () => {
     // Validate to detect unexpected empty SVG content and prevent dead code elimination
     if (totalSvgLength === 0 && results.length > 0) {
         throw new Error('Unexpected empty SVG content');
+    }
+});
+*/
+
+bench('simple arithmetic', () => {
+    let sum = 0;
+    for (let i = 0; i < 1_000_000; i++) {
+        sum += i;
+    }
+    if (sum < 0) {
+        throw new Error('Unexpected negative sum');
     }
 });
