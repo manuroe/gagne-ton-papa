@@ -68,6 +68,6 @@ jobs:
         uses: CodSpeedHQ/action@v4
         with:
           working-directory: web-test
-          mode: walltime
+          mode: simulation
           run: npm run bench
           token: ${{ secrets.CODSPEED_TOKEN }}

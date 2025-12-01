@@ -21,7 +21,7 @@ describe("game solver", () => {
     const allPiecesGame = gtpLib.JSGame.game_with_all_pieces();
     const game = gtpLib.JSGame.game_from_game(
       allPiecesGame,
-      Uint32Array.from([0, 4, 5, 6, 9, 15])
+      Uint32Array.from([0, 4, 5, 6, 9, 15, 16])
     );
     
     const solutions = game.resolve();
