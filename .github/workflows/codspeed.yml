@@ -8,6 +8,10 @@ on:
   # `workflow_dispatch` allows CodSpeed to trigger backfill builds
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   benchmarks:
     name: Run benchmarks
@@ -53,5 +57,6 @@ jobs:
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v3
         with:
-          run: npm run bench
           working-directory: web-test
+          run: npm run bench
+          token: ${{ secrets.CODSPEED_TOKEN }}
