@@ -55,8 +55,9 @@ jobs:
         run: npm ci
 
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@v3
+        uses: CodSpeedHQ/action@v4
         with:
           working-directory: web-test
+          mode: simulation
           run: npm run bench
           token: ${{ secrets.CODSPEED_TOKEN }}
