@@ -51,7 +51,7 @@ jobs:
           test -f lib-wasm/pkg/lib_wasm_bg.wasm
 
       - name: Install Packages
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Build page
         run: npm run build

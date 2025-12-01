@@ -76,6 +76,6 @@ jobs:
           ls -la lib-wasm/pkg
           test -f lib-wasm/pkg/lib_wasm_bg.wasm
 
-      - run: npm ci --legacy-peer-deps
+      - run: npm ci
       # - run: npm test
       - run: npm run build
