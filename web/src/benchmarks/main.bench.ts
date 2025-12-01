@@ -54,6 +54,7 @@ bench('resolve_and_render_first_page', async () => {
 });
 */
 
+/*
 bench('simple arithmetic', () => {
     let sum = 0;
     for (let i = 0; i < 1_000_000; i++) {
@@ -62,4 +63,19 @@ bench('simple arithmetic', () => {
     if (sum < 0) {
         throw new Error('Unexpected negative sum');
     }
+});
+*/
+
+import { bench, describe, test } from "vitest";
+
+describe("simple arithmetic", () => {
+    bench('simple arithmetic', () => {
+    let sum = 0;
+    for (let i = 0; i < 1_000_000; i++) {
+        sum += i;
+    }
+    if (sum < 0) {
+        throw new Error('Unexpected negative sum');
+    }
+    });
 });
