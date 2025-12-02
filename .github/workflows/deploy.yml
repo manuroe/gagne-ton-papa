@@ -24,6 +24,7 @@ jobs:
           cache-dependency-path: 'web/package-lock.json'
 
       - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@stable
 
       - uses: ./.github/actions/build-wasm
 
