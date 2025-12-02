@@ -2,32 +2,30 @@ on: [pull_request]
 
 name: Build
 
-jobs:
-  build_lib:
-    name: Build lib
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
   build_lib_bindgen:
     name: Build lib-wasm 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@stable
 
-      - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - working-directory: ./lib-wasm
-        run: wasm-pack build --target web
+      - uses: ./.github/actions/build-wasm
+
+      - name: Upload wasm package
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm-pkg
+          path: lib-wasm/pkg
 
   build_web:
     name: Build web
+    needs: build_lib_bindgen
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -35,15 +33,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Download wasm package
+        uses: actions/download-artifact@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          name: wasm-pkg
+          path: lib-wasm/pkg
 
-      - name: Build lib-wasm
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - working-directory: ./lib-wasm
-        run: wasm-pack build --target web
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'web/package-lock.json'
 
       - run: npm ci --legacy-peer-deps
       # - run: npm test

@@ -8,6 +8,10 @@ on:
   # `workflow_dispatch` allows CodSpeed to trigger backfill builds
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   id-token: write
@@ -21,6 +25,8 @@ jobs:
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
 
       - name: Install cargo-codspeed
         uses: taiki-e/install-action@v2
@@ -47,12 +53,9 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - uses: Swatinem/rust-cache@v2
 
-      - name: Build Wasm module
-        working-directory: lib-wasm
-        run: wasm-pack build --target web
+      - uses: ./.github/actions/build-wasm
 
       - uses: actions/setup-node@v4
         with:

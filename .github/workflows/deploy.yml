@@ -17,14 +17,16 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: 'web/package-lock.json'
 
-      - name: Build lib-wasm
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - working-directory: ./lib-wasm
-        run: wasm-pack build --target web
+      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: ./.github/actions/build-wasm
 
       - name: Install Packages
         run: npm ci --legacy-peer-deps

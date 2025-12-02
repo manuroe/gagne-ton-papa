@@ -1,0 +1,14 @@
+name: 'Build WASM'
+description: 'Builds the WASM package'
+runs:
+  using: "composite"
+  steps:
+    - name: Install wasm-pack
+      uses: jetli/wasm-pack-action@v0.4.0
+      with:
+        version: 'latest'
+
+    - name: Build wasm package
+      shell: bash
+      working-directory: ./lib-wasm
+      run: wasm-pack build --target web
