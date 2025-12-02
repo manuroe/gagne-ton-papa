@@ -8,9 +8,13 @@ on:
   # `workflow_dispatch` allows CodSpeed to trigger backfill builds
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
-  benchmarks:
-    name: Run benchmarks
+  rust-benchmarks:
+    name: Run Rust benchmarks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,4 +36,37 @@ jobs:
         with:
           working-directory: lib
           run: cargo codspeed run
+          token: ${{ secrets.CODSPEED_TOKEN }}
+
+  wasm-benchmarks:
+    name: Run Wasm benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Build Wasm module
+        working-directory: lib-wasm
+        run: wasm-pack build --target web
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'lib-wasm/benchmark/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: lib-wasm/benchmark
+        run: npm ci
+
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v3
+        with:
+          working-directory: lib-wasm/benchmark
+          run: npm run bench
           token: ${{ secrets.CODSPEED_TOKEN }}
