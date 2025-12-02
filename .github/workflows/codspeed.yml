@@ -65,7 +65,7 @@ jobs:
         run: npm ci
 
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@v4
+        uses: CodSpeedHQ/action@v3
         with:
           working-directory: lib-wasm/benchmark
           run: npm run bench
