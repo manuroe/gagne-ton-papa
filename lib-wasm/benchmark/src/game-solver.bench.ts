@@ -3,6 +3,14 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import init, * as gtpLib from "lib-wasm";
 
+function createTestGame(): gtpLib.JSGame {
+  const allPiecesGame = gtpLib.JSGame.game_with_all_pieces();
+  return gtpLib.JSGame.game_from_game(
+    allPiecesGame,
+    Uint32Array.from([0, 4, 5, 6, 9, 15, 16])
+  );
+}
+
 describe("game solver", () => {
   beforeAll(async () => {
     // Initialize the WASM module before running benchmarks
@@ -18,11 +26,7 @@ describe("game solver", () => {
     // YellowZigZag4, PinkNotSquare5, YellowU5) on a 5-column board
     // These correspond to piece IDs: 0, 4, 5, 6, 9, 15, 16 in game_with_all_pieces
     // (RedSquare1, BrownL3, OrangeBar3, PinkBar4, YellowZigZag4, PinkNotSquare5, YellowU5)
-    const allPiecesGame = gtpLib.JSGame.game_with_all_pieces();
-    const game = gtpLib.JSGame.game_from_game(
-      allPiecesGame,
-      Uint32Array.from([0, 4, 5, 6, 9, 15, 16])
-    );
+    const game = createTestGame();
     
     const solutions = game.resolve();
     
@@ -34,27 +38,19 @@ describe("game solver", () => {
 
 
   bench('resolve_count_only', () => {
-    const allPiecesGame = gtpLib.JSGame.game_with_all_pieces();
-    const game = gtpLib.JSGame.game_from_game(
-      allPiecesGame,
-      Uint32Array.from([0, 4, 5, 6, 9, 15, 16])
-    );
+    const game = createTestGame();
     
     // Result pagination is not yet implemented. This benchmark is about getting the initial metrics
     const solutions_count = game.resolve_count();
 
-        // Verify we got solutions (same assertion as Rust benchmark)
+    // Verify we got solutions (same assertion as Rust benchmark)
     if (solutions_count === 0) {
       throw new Error("Expected solutions but got none");
     }
   });
 
   bench('resolve_and_render_first_page', () => {
-    const allPiecesGame = gtpLib.JSGame.game_with_all_pieces();
-    const game = gtpLib.JSGame.game_from_game(
-      allPiecesGame,
-      Uint32Array.from([0, 4, 5, 6, 9, 15, 16])
-    );
+    const game = createTestGame();
     
     // Result pagination is not yet implemented. This benchmark is about getting the initial metrics
     const solutions = game.resolve();
