@@ -16,7 +16,7 @@ This project implements a solver for the puzzle game where players must fit wood
 ### Prerequisites
 
 - [Rust](https://www.rust-lang.org/tools/install) (latest stable)
-- [Node.js](https://nodejs.org/) (v14+)
+- [Node.js](https://nodejs.org/) (v18+)
 - [wasm-pack](https://rustwasm.github.io/wasm-pack/installer.html)
 
 ### Quick Start

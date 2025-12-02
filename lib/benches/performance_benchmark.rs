@@ -1,3 +1,5 @@
+#![allow(clippy::significant_drop_tightening)]
+
 use codspeed_criterion_compat::{criterion_group, criterion_main, Criterion};
 use gtp_lib::{Game, PieceName, GameResolver, GameResolverTrait};
 
@@ -23,9 +25,10 @@ fn resolve_specific_game(c: &mut Criterion) {
         b.iter(|| {
             let solutions = resolver.resolve(&game);
             assert!(!solutions.is_empty());
-        })
+        });
     });
 }
+
 
 criterion_group!(benches, resolve_specific_game);
 criterion_main!(benches);
