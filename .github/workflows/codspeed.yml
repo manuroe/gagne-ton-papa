@@ -68,6 +68,5 @@ jobs:
         uses: CodSpeedHQ/action@v4
         with:
           working-directory: lib-wasm/benchmark
-          mode: simulation
           run: npm run bench
           token: ${{ secrets.CODSPEED_TOKEN }}
