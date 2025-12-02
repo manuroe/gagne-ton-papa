@@ -25,10 +25,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Build lib-wasm
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - working-directory: ./lib-wasm
-        run: wasm-pack build --target web
+      - uses: ./.github/actions/build-wasm
 
       - name: Install Packages
         run: npm ci --legacy-peer-deps

@@ -1,0 +1,13 @@
+name: 'Build WASM'
+description: 'Builds the WASM package'
+runs:
+  using: "composite"
+  steps:
+    - name: Install wasm-pack
+      shell: bash
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+    - name: Build wasm package
+      shell: bash
+      working-directory: ./lib-wasm
+      run: wasm-pack build --target web

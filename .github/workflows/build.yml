@@ -27,19 +27,29 @@ jobs:
       - uses: actions/checkout@v2
       - uses: Swatinem/rust-cache@v2
 
-      - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - working-directory: ./lib-wasm
-        run: wasm-pack build --target web
+      - uses: ./.github/actions/build-wasm
+
+      - name: Upload wasm package
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm-pkg
+          path: lib-wasm/pkg
 
   build_web:
     name: Build web
+    needs: build_lib_bindgen
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./web
     steps:
       - uses: actions/checkout@v2
+
+      - name: Download wasm package
+        uses: actions/download-artifact@v4
+        with:
+          name: wasm-pkg
+          path: lib-wasm/pkg
 
       - name: Use Node.js 20
         uses: actions/setup-node@v4
@@ -49,11 +59,6 @@ jobs:
           cache-dependency-path: 'web/package-lock.json'
 
       - uses: Swatinem/rust-cache@v2
-
-      - name: Build lib-wasm
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - working-directory: ./lib-wasm
-        run: wasm-pack build --target web
 
       - run: npm ci --legacy-peer-deps
       # - run: npm test
