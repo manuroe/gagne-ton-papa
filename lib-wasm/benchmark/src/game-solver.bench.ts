@@ -33,7 +33,7 @@ describe("game solver", () => {
   });
 
 
-  bench('resolve_count_only', async () => {
+  bench('resolve_count_only', () => {
     const allPiecesGame = gtpLib.JSGame.game_with_all_pieces();
     const game = gtpLib.JSGame.game_from_game(
       allPiecesGame,
@@ -44,12 +44,12 @@ describe("game solver", () => {
     const solutions_count = game.resolve_count();
 
         // Verify we got solutions (same assertion as Rust benchmark)
-    if (solutions_count=== 0) {
+    if (solutions_count === 0) {
       throw new Error("Expected solutions but got none");
     }
   });
 
-  bench('resolve_and_render_first_page', async () => {
+  bench('resolve_and_render_first_page', () => {
     const allPiecesGame = gtpLib.JSGame.game_with_all_pieces();
     const game = gtpLib.JSGame.game_from_game(
       allPiecesGame,
