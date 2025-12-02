@@ -11,6 +11,11 @@ use crate::matrix_tools;
 pub trait GameResolverTrait {
     /// Finds all valid solutions for the given game.
     fn resolve(&self, game: &Game) -> Vec<DMatrix<u32>>;
+
+    /// Finds the number of valid solutions for the given game without allocating solution matrices.
+    fn resolve_count(&self, game: &Game) -> u32 {
+        u32::try_from(self.resolve(game).len()).expect("solution count exceeds u32::MAX")
+    }
     
     /// Generates all unique variants (rotations and reflections) of a piece.
     fn piece_variants(&self, piece: &Piece) -> Vec<Piece>;

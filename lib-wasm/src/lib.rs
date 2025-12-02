@@ -4,6 +4,7 @@ use wasm_bindgen::prelude::*;
 
 use gtp_lib::models::*;
 use gtp_lib::game_data::*;
+use gtp_lib::{GameResolver, GameResolverTrait};
 
 use js_models::*;
 
@@ -24,5 +25,11 @@ impl JSGame {
         Self {
             game: Game { columns: 5, pieces }
         }
+    }
+
+    // Returns only the count of solutions for the game.
+    pub fn resolve_count(&self) -> u32 {
+        let resolver = GameResolver;
+        resolver.resolve_count(&self.game)
     }
 }

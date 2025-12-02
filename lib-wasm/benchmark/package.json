@@ -1,0 +1,19 @@
+{
+  "name": "wasm-benchmark",
+  "version": "1.0.0",
+  "description": "WASM Benchmarking tests lib-wasm",
+  "type": "module",
+  "scripts": {
+    "bench": "vitest bench",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@codspeed/vitest-plugin": "^3.1.1",
+    "@types/node": "^24.10.1",
+    "typescript": "^5.3.3",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "lib-wasm": "file:../pkg"
+  }
+}
