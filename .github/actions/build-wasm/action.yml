@@ -4,8 +4,9 @@ runs:
   using: "composite"
   steps:
     - name: Install wasm-pack
-      shell: bash
-      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      uses: jetli/wasm-pack-action@v0.4.0
+      with:
+        version: 'latest'
 
     - name: Build wasm package
       shell: bash
