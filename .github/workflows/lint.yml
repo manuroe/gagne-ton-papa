@@ -1,6 +1,14 @@
-on: [pull_request, push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 name: Lint
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   clippy_check:

@@ -1,6 +1,14 @@
-on: [pull_request, push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 name: Tests
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test_lib:
