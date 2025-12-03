@@ -26,10 +26,10 @@ vi.mock('lib-wasm', () => {
 
 // Import after mocking
 import App from './App'
+import * as libWasm from 'lib-wasm'
 
 it('shows missing cells after selecting a piece', async () => {
-  const { JSGame } = require('lib-wasm')
-  const allPiecesGame = JSGame.game_with_all_pieces()
+  const allPiecesGame = libWasm.JSGame.game_with_all_pieces()
 
   render(<App allPiecesGame={allPiecesGame} />)
 
