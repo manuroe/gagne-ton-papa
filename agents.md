@@ -33,6 +33,7 @@
 
 ### Web (`web`)
 - **Framework**: React 18+, TypeScript.
+- **Build Tool**: Vite. Use `npm start` for dev and `npm run build` for production; output is in `web/dist`.
 - **Styling**: CSS Modules or Vanilla CSS. **NO** Tailwind unless explicitly requested.
 - **UX/UI**:
     - **Target Audience**: Children (vibrant, clear, intuitive).
@@ -49,4 +50,3 @@
 ### Common Tasks
 - **New Feature**: Plan -> Implement in `lib` -> Expose in `lib-wasm` -> UI in `web`.
 - **Refactor**: Ensure tests pass at every step.
-
