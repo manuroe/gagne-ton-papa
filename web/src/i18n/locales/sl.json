@@ -9,7 +9,6 @@
   "noSolution": "Rešitev ni bila najdena 😕",
   "foundSolutions_one": "Našel sem {{count}} rešitev! 🎉",
   "foundSolutions_two": "Našel sem {{count}} rešitvi! 🎉",
-  "foundSolutions_one": "Našel sem {{count}} rešitev! 🎉",
   "foundSolutions_other": "Našel sem {{count}} rešitev! 🎉",
   "foundSolutionsLoading_one": "foundSolutionsLoading_one",
   "foundSolutionsLoading_other": "foundSolutionsLoading_other",

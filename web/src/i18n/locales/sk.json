@@ -7,7 +7,6 @@
   "thinking": "Premýšľam... 🤔",
   "noSolution": "Riešenie sa nenašlo 😕",
   "foundSolutions_one": "Našiel som {{count}} riešenie! 🎉",
-  "foundSolutions_one": "Našiel som {{count}} riešenie! 🎉",
   "foundSolutions_other": "Našiel som {{count}} riešení! 🎉",
   "foundSolutionsLoading_one": "foundSolutionsLoading_one",
   "foundSolutionsLoading_other": "foundSolutionsLoading_other",
