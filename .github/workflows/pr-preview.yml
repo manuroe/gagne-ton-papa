@@ -36,7 +36,7 @@ jobs:
         uses: ./.github/actions/build-wasm
 
       - name: Install Packages
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Build web
         run: npm run build
@@ -47,13 +47,14 @@ jobs:
           OWNER=${{ github.repository_owner }}
           REPO=${{ github.event.repository.name }}
           URL="https://${OWNER}.github.io/${REPO}/pr-${PR_NUMBER}/"
-          npx --yes qrcode -o build/preview-qr.png "$URL"
+          mkdir -p dist
+          npx --yes qrcode -o dist/preview-qr.png "$URL"
 
       - name: Deploy PR preview to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./web/build
+          publish_dir: ./web/dist
           destination_dir: pr-${{ github.event.pull_request.number }}
 
       - name: Comment preview URL
