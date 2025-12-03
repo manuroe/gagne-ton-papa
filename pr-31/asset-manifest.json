@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/gagne-ton-papa/static/css/main.2419d4d5.css",
-    "main.js": "/gagne-ton-papa/static/js/main.c12f56c6.js",
+    "main.js": "/gagne-ton-papa/static/js/main.31e0956b.js",
     "static/js/787.d1d4a2c2.chunk.js": "/gagne-ton-papa/static/js/787.d1d4a2c2.chunk.js",
-    "static/media/lib_wasm_bg.wasm": "/gagne-ton-papa/static/media/lib_wasm_bg.d3bc9c3b56958c06ea6e.wasm",
+    "static/media/lib_wasm_bg.wasm": "/gagne-ton-papa/static/media/lib_wasm_bg.ae09ab8cf6ed217f4365.wasm",
     "index.html": "/gagne-ton-papa/index.html",
     "main.2419d4d5.css.map": "/gagne-ton-papa/static/css/main.2419d4d5.css.map",
-    "main.c12f56c6.js.map": "/gagne-ton-papa/static/js/main.c12f56c6.js.map",
+    "main.31e0956b.js.map": "/gagne-ton-papa/static/js/main.31e0956b.js.map",
     "787.d1d4a2c2.chunk.js.map": "/gagne-ton-papa/static/js/787.d1d4a2c2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2419d4d5.css",
-    "static/js/main.c12f56c6.js"
+    "static/js/main.31e0956b.js"
   ]
 }
