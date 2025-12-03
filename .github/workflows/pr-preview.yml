@@ -11,6 +11,7 @@ concurrency:
 permissions:
   contents: write  # For gh-pages deployment
   pull-requests: write  # For PR comments
+
 jobs:
   build_and_preview:
     name: Build PR Preview
@@ -63,8 +64,4 @@ jobs:
             PR preview deployed to:
             - https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}/
             
-            Scan to open:
-            
             ![QR Code](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}/preview-qr.png)
-            
-            Pages activity: https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/deployments/activity_log?environments=github-pages
