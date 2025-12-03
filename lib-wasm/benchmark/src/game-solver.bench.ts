@@ -36,19 +36,6 @@ describe("game solver", () => {
     }
   });
 
-
-  bench('resolve_count_only', () => {
-    const game = createTestGame();
-    
-    // Result pagination is not yet implemented. This benchmark is about getting the initial metrics
-    const solutions_count = game.resolve_count();
-
-    // Verify we got solutions (same assertion as Rust benchmark)
-    if (solutions_count === 0) {
-      throw new Error("Expected solutions but got none");
-    }
-  });
-
   bench('resolve_and_render_first_page', () => {
     const game = createTestGame();
     
