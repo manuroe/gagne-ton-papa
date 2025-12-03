@@ -38,6 +38,11 @@ jobs:
       - name: Install Packages
         run: npm ci
 
+      - name: Copy WASM to public for preview
+        run: |
+          mkdir -p public
+          cp ../lib-wasm/pkg/lib_wasm_bg.wasm public/lib_wasm_bg.wasm
+
       - name: Build web
         run: npm run build
 

@@ -7,12 +7,7 @@ import type { UserConfig } from 'vite'
 const config: UserConfig = {
   base: '/gagne-ton-papa',
   plugins: [react()],
-  server: {
-    fs: {
-      // Allow serving files from the monorepo root so lib-wasm/pkg works in dev
-      allow: [path.resolve(__dirname, '..'), path.resolve(__dirname)],
-    },
-  },
+  // No fs.allow relaxation; WASM can be copied into public for dev/preview
 }
 
 export default defineConfig(({ mode }) => {

@@ -2,8 +2,8 @@
   "name": "web",
   "homepage": "/gagne-ton-papa",
   "version": "0.1.0",
-    "private": true,
-    "dependencies": {
+  "private": true,
+  "dependencies": {
       "@testing-library/jest-dom": "^6.4.6",
       "@testing-library/react": "^16.0.0",
       "@testing-library/user-event": "^14.5.2",
@@ -16,77 +16,79 @@
       "typescript": "^5.4.5",
       "web-vitals": "^4.2.3"
     },
-    "devDependencies": {
-      "@types/jest": "^27.5.2",
-      "@types/node": "^20.12.12",
-      "@types/react": "^18.3.8",
-      "@types/react-dom": "^18.3.0",
-      "@typescript-eslint/eslint-plugin": "^8.48.1",
-      "@typescript-eslint/parser": "^8.48.1",
-      "@vitejs/plugin-react": "^4.3.1",
-      "eslint": "^8.57.0",
-      "eslint-plugin-react": "^7.37.5",
-      "jsdom": "^24.0.0",
-      "vite": "^5.0.0",
-      "vitest": "^1.6.0"
+  "devDependencies": {
+    "@types/jest": "^27.5.2",
+    "@types/node": "^20.12.12",
+    "@types/react": "^18.3.8",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.37.5",
+    "jsdom": "^24.0.0",
+    "vite": "^5.0.0",
+    "vitest": "^1.6.0"
+  },
+  "scripts": {
+    "wasm:sync": "cp ../lib-wasm/pkg/lib_wasm_bg.wasm public/lib_wasm_bg.wasm || true",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "lint": "eslint 'src/**/*.{ts,tsx}'"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true
     },
-    "scripts": {
-      "wasm:sync": "cp ../lib-wasm/pkg/lib_wasm_bg.wasm public/lib_wasm_bg.wasm || true",
-      "start": "vite",
-      "build": "vite build",
-      "preview": "vite preview",
-      "test": "vitest",
-      "lint": "eslint 'src/**/*.{ts,tsx}'"
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": "latest",
+      "sourceType": "module"
     },
-    "eslintConfig": {
-      "env": {
-        "browser": true,
-        "es2021": true
-      },
-      "parser": "@typescript-eslint/parser",
-      "parserOptions": {
-        "ecmaFeatures": {
-          "jsx": true
-        },
-        "ecmaVersion": "latest",
-        "sourceType": "module"
-      },
-      "plugins": [
-        "react",
-        "@typescript-eslint"
-      ],
-      "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
-      ],
-      "settings": {
-        "react": {
-          "version": "detect"
-        }
-      },
-      "rules": {
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-empty-object-type": "off",
-        "@typescript-eslint/no-unused-vars": [
-          "warn",
-          {
-            "argsIgnorePattern": "^_"
-          }
-        ],
-        "prefer-const": "off"
+    "plugins": [
+      "react",
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "settings": {
+      "react": {
+        "version": "detect"
       }
     },
-    "browserslist": {
-      "production": [
-        ">0.2%",
-        "not dead",
-        "not op_mini all"
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_"
+        }
       ],
-      "development": [
-        "last 1 chrome version",
-        "last 1 firefox version",
-        "last 1 safari version"
-      ]
+      "prefer-const": "off"
     }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
+
+}
+
