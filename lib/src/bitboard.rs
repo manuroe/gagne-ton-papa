@@ -133,7 +133,7 @@ mod tests {
         // Should have 4 positions: (0,0), (0,1), (1,0), (1,1)
         let piece = Piece {
             matrix: create_matrix(1, 1, &[1]),
-            color: 0xFF0000,
+            color: 0xFF_0000,
             tui_color: 0,
         };
         
@@ -143,7 +143,7 @@ mod tests {
         // Check first position (0,0) -> bit 0
         let (bits, mat) = &positions[0];
         assert_eq!(*bits, 1u64 << 0);
-        assert_eq!(mat[(0, 0)], 0xFF0000);
+        assert_eq!(mat[(0, 0)], 0xFF_0000);
     }
 
     #[test]

@@ -37,10 +37,9 @@ fn bench_resolve_specific_game_first_results(c: &mut Criterion) {
 
     c.bench_function("resolve_specific_game_first_results", |b| {
         b.iter(|| {
-            // TODO: Stream the results as they are found
-            // For now, we can only get the full resolution
-            let solutions = resolver.resolve(&game);
-            assert!(!solutions.is_empty());
+            // Measure time-to-first-results using pagination
+            let first_page = resolver.resolve_page(&game, 0, 1);
+            assert!(!first_page.is_empty());
         });
     });
 }

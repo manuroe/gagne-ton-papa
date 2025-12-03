@@ -7,6 +7,8 @@
   "noSolution": "Keine Lösung gefunden 😕",
   "foundSolutions_one": "Ich habe {{count}} Lösung gefunden! 🎉",
   "foundSolutions_other": "Ich habe {{count}} Lösungen gefunden! 🎉",
+  "foundSolutionsLoading_one": "Ich habe {{count}} Lösung gefunden und denke noch nach... 🤔",
+  "foundSolutionsLoading_other": "Ich suche nach Lösungen... ⏳",
   "sourceCode": "Quellcode auf GitHub",
   "language": "Sprache"
 }

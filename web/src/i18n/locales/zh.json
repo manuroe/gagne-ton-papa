@@ -5,6 +5,8 @@
   "thinking": "我正在思考... 🤔",
   "noSolution": "没有找到解决方案 😕",
   "foundSolutions_other": "我找到了 {{count}} 个解决方案！🎉",
+  "foundSolutionsLoading_one": "我找到了 {{count}} 个解决方案，还在思考中... 🤔",
+  "foundSolutionsLoading_other": "我找到了 {{count}} 个解决方案，还在思考中... 🤔",
   "sourceCode": "GitHub上的源代码",
   "language": "语言"
 }

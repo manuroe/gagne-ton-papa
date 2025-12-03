@@ -7,6 +7,8 @@
   "noSolution": "Risinājums nav atrasts 😕",
   "foundSolutions_one": "Atradu {{count}} risinājumu! 🎉",
   "foundSolutions_other": "Atradu {{count}} risinājumus! 🎉",
-  "sourceCode": "Pirmkods uz GitHub",
+  "foundSolutionsLoading_one": "Atradu {{count}} risinājumu un vēl domāju... 🤔",
+  "foundSolutionsLoading_other": "Meklēju {{count}} risinājumus...",
+  "sourceCode": "Pirmkods GitHub",
   "language": "Valoda"
 }

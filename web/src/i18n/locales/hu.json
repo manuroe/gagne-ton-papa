@@ -7,6 +7,8 @@
   "noSolution": "Nem találtam megoldást 😕",
   "foundSolutions_one": "Találtam {{count}} megoldást! 🎉",
   "foundSolutions_other": "Találtam {{count}} megoldást! 🎉",
+  "foundSolutionsLoading_one": "Megoldásokat keresek... ⏳",
+  "foundSolutionsLoading_other": "Megoldásokat keresek... ⏳",
   "sourceCode": "Forráskód a GitHubon",
   "language": "Nyelv"
 }

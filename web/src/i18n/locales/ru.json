@@ -7,10 +7,11 @@
   "missingCells_other": "Не хватает деталей, чтобы покрыть {{count}} клеток.",
   "thinking": "Думаю... 🤔",
   "noSolution": "Решение не найдено 😕",
-  "foundSolutions_one": "Нашёл {{count}} решение! 🎉",
+  "foundSolutions_one": "Я нашел {{count}} решение! 🎉",
   "foundSolutions_few": "Нашёл {{count}} решения! 🎉",
-  "foundSolutions_many": "Нашёл {{count}} решений! 🎉",
-  "foundSolutions_other": "Нашёл {{count}} решений! 🎉",
+  "foundSolutions_other": "Я нашел {{count}} решений! 🎉",
+  "foundSolutionsLoading_one": "Я нашел {{count}} решение и всё ещё думаю... 🤔",
+  "foundSolutionsLoading_other": "Я нашел {{count}} решений и всё ещё думаю... 🤔",
   "sourceCode": "Исходный код на GitHub",
   "language": "Язык"
 }

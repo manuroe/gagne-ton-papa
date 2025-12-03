@@ -7,6 +7,8 @@
   "noSolution": "Ratkaisua ei löytynyt 😕",
   "foundSolutions_one": "Löysin {{count}} ratkaisun! 🎉",
   "foundSolutions_other": "Löysin {{count}} ratkaisua! 🎉",
+  "foundSolutionsLoading_one": "Löysin {{count}} ratkaisun ja ajattelen vielä... 🤔",
+  "foundSolutionsLoading_other": "Etsin ratkaisuja... 🎉",
   "sourceCode": "Lähdekoodi GitHubissa",
   "language": "Kieli"
 }

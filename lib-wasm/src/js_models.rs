@@ -111,6 +111,15 @@ impl JSGame {
         .collect::<js_sys::Array>()
         .unchecked_into::<JSMatrixArray>()
     }
+
+    pub fn resolve_page(&self, page_index: usize, page_size: usize) -> JSMatrixArray {
+        let resolver = GameResolver {};
+        resolver.resolve_page(&self.game, page_index, page_size).iter()
+        .map(JSMatrix::new)
+        .map(JsValue::from)
+        .collect::<js_sys::Array>()
+        .unchecked_into::<JSMatrixArray>()
+    }
 }
 
 

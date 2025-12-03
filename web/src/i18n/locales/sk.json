@@ -7,8 +7,9 @@
   "thinking": "Premýšľam... 🤔",
   "noSolution": "Riešenie sa nenašlo 😕",
   "foundSolutions_one": "Našiel som {{count}} riešenie! 🎉",
-  "foundSolutions_few": "Našiel som {{count}} riešenia! 🎉",
   "foundSolutions_other": "Našiel som {{count}} riešení! 🎉",
-  "sourceCode": "Zdrojový kód na GitHube",
+  "foundSolutionsLoading_one": "Našiel som {{count}} riešenie a stále premýšľam... 🤔",
+  "foundSolutionsLoading_other": "Našiel som {{count}} riešení a stále premýšľam... 🤔",
+  "sourceCode": "Zdrojový kód na GitHub",
   "language": "Jazyk"
 }

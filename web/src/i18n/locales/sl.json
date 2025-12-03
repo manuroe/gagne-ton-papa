@@ -9,8 +9,9 @@
   "noSolution": "Rešitev ni bila najdena 😕",
   "foundSolutions_one": "Našel sem {{count}} rešitev! 🎉",
   "foundSolutions_two": "Našel sem {{count}} rešitvi! 🎉",
-  "foundSolutions_few": "Našel sem {{count}} rešitve! 🎉",
   "foundSolutions_other": "Našel sem {{count}} rešitev! 🎉",
+  "foundSolutionsLoading_one": "Našel sem {{count}} rešitev in še razmišljam... 🤔",
+  "foundSolutionsLoading_other": "Našel sem {{count}} rešitev in še razmišljam... 🤔",
   "sourceCode": "Izvorna koda na GitHubu",
   "language": "Jezik"
 }
