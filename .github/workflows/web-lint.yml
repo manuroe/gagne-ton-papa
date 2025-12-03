@@ -33,7 +33,7 @@ jobs:
       - uses: ./.github/actions/build-wasm
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Run Lint
         run: npm run lint
