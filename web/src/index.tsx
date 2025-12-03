@@ -7,7 +7,10 @@ import reportWebVitals from './reportWebVitals';
 
 import init, * as gtpLib from 'lib-wasm';
 
-init().then(() => {
+// Ensure WASM loads correctly on GitHub Pages by providing explicit path
+const wasmPath = `${process.env.PUBLIC_URL}/lib_wasm_bg.wasm`;
+
+init(wasmPath).then(() => {
   const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
   );
