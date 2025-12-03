@@ -49,6 +49,6 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'web/package-lock.json'
 
-      - run: npm ci --legacy-peer-deps
+      - run: npm ci
       # - run: npm test
       - run: npm run build
