@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/gagne-ton-papa/static/css/main.b8f3a69b.css",
-    "main.js": "/gagne-ton-papa/static/js/main.3bb8976e.js",
+    "main.js": "/gagne-ton-papa/static/js/main.f514b967.js",
     "static/js/787.d1d4a2c2.chunk.js": "/gagne-ton-papa/static/js/787.d1d4a2c2.chunk.js",
     "static/media/lib_wasm_bg.wasm": "/gagne-ton-papa/static/media/lib_wasm_bg.ae09ab8cf6ed217f4365.wasm",
     "index.html": "/gagne-ton-papa/index.html",
     "main.b8f3a69b.css.map": "/gagne-ton-papa/static/css/main.b8f3a69b.css.map",
-    "main.3bb8976e.js.map": "/gagne-ton-papa/static/js/main.3bb8976e.js.map",
+    "main.f514b967.js.map": "/gagne-ton-papa/static/js/main.f514b967.js.map",
     "787.d1d4a2c2.chunk.js.map": "/gagne-ton-papa/static/js/787.d1d4a2c2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b8f3a69b.css",
-    "static/js/main.3bb8976e.js"
+    "static/js/main.f514b967.js"
   ]
 }
