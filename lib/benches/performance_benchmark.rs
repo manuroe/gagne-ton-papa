@@ -3,7 +3,7 @@
 use codspeed_criterion_compat::{criterion_group, criterion_main, Criterion};
 use gtp_lib::{Game, PieceName, GameResolver, GameResolverTrait};
 
-fn resolve_specific_game(c: &mut Criterion) {
+fn sample_game() -> Game {
     let pieces = vec![
         PieceName::RedSquare1.piece(),
         PieceName::BrownL3.piece(),
@@ -14,10 +14,11 @@ fn resolve_specific_game(c: &mut Criterion) {
         PieceName::YellowU5.piece(),
     ];
 
-    let game = Game {
-        columns: 5,
-        pieces,
-    };
+    Game { columns: 5, pieces }
+}
+
+fn bench_resolve_specific_game(c: &mut Criterion) {
+    let game = sample_game();
 
     let resolver = GameResolver;
 
@@ -29,6 +30,24 @@ fn resolve_specific_game(c: &mut Criterion) {
     });
 }
 
+fn bench_resolve_specific_game_first_results(c: &mut Criterion) {
+    let game = sample_game();
 
-criterion_group!(benches, resolve_specific_game);
+    let resolver = GameResolver;
+
+    c.bench_function("resolve_specific_game_first_results", |b| {
+        b.iter(|| {
+            // TODO: Stream the results as they are found
+            // For now, we can only get the full resolution
+            let solutions = resolver.resolve(&game);
+            assert!(!solutions.is_empty());
+        });
+    });
+}
+
+criterion_group!(
+    benches,
+    bench_resolve_specific_game,
+    bench_resolve_specific_game_first_results
+);
 criterion_main!(benches);
