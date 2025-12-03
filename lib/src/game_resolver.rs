@@ -4,6 +4,43 @@ use crate::models::{Game, Piece};
 use crate::matrix_tools;
 use crate::bitboard::{BitBoard, generate_positions};
 
+// Helper context and DFS for paginated resolution
+struct PageCtx<'a> {
+    precomputed: &'a [Vec<(BitBoard, DMatrix<u32>)>],
+    start: usize,
+    end: usize,
+}
+
+fn dfs_page(
+    ctx: &mut PageCtx,
+    depth: usize,
+    boards_bits: BitBoard,
+    boards_matrix: &DMatrix<u32>,
+    results: &mut Vec<DMatrix<u32>>,
+    count: &mut usize,
+) -> bool {
+    if *count >= ctx.end {
+        return true; // stop early
+    }
+    if depth == ctx.precomputed.len() {
+        if *count >= ctx.start {
+            results.push(boards_matrix.clone());
+        }
+        *count += 1;
+        return *count >= ctx.end;
+    }
+    for (placement_bits, placement_matrix) in &ctx.precomputed[depth] {
+        if boards_bits & *placement_bits == 0 {
+            let new_bits = boards_bits | *placement_bits;
+            let new_matrix = boards_matrix + placement_matrix;
+            if dfs_page(ctx, depth + 1, new_bits, &new_matrix, results, count) {
+                return true;
+            }
+        }
+    }
+    false
+}
+
 /// Trait for game puzzle solvers.
 ///
 /// Implementors of this trait can solve puzzle games by finding all valid
@@ -147,42 +184,10 @@ impl GameResolverTrait for GameResolver {
         let end = start.saturating_add(page_size);
         let mut count = 0usize;
 
-        // DFS with pagination: skip first 'start' solutions, collect next 'page_size'
-        fn dfs(
-            depth: usize,
-            boards_bits: BitBoard,
-            boards_matrix: &DMatrix<u32>,
-            precomputed: &[Vec<(BitBoard, DMatrix<u32>)>],
-            results: &mut Vec<DMatrix<u32>>,
-            count: &mut usize,
-            start: usize,
-            end: usize,
-        ) -> bool {
-            if *count >= end {
-                return true; // stop early
-            }
-            if depth == precomputed.len() {
-                if *count >= start {
-                    results.push(boards_matrix.clone());
-                }
-                *count += 1;
-                return *count >= end;
-            }
-            for (placement_bits, placement_matrix) in &precomputed[depth] {
-                if boards_bits & *placement_bits == 0 {
-                    let new_bits = boards_bits | *placement_bits;
-                    let new_matrix = boards_matrix + placement_matrix;
-                    if dfs(depth + 1, new_bits, &new_matrix, precomputed, results, count, start, end) {
-                        return true;
-                    }
-                }
-            }
-            false
-        }
-
         let empty_board_bits: BitBoard = 0;
         let empty_board_matrix = DMatrix::<u32>::zeros(rows, cols);
-        dfs(0, empty_board_bits, &empty_board_matrix, &precomputed, &mut results, &mut count, start, end);
+        let mut ctx = PageCtx { precomputed: &precomputed, start, end };
+        dfs_page(&mut ctx, 0, empty_board_bits, &empty_board_matrix, &mut results, &mut count);
         results
     }
 }
