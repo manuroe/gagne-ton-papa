@@ -10,7 +10,7 @@
   "foundSolutions_few": "Radau {{count}} sprendimus! 🎉",
   "foundSolutions_other": "Radau {{count}} sprendimų! 🎉",
   "foundSolutionsLoading_one": "foundSolutionsLoading_one",
-  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
+  "foundSolutionsLoading_other": "Ieškau sprendimų...",
   "sourceCode": "Šaltinio kodas GitHub platformoje",
   "language": "Kalba"
 }

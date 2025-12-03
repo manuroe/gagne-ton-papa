@@ -9,10 +9,10 @@
   "noSolution": "Nie znaleziono rozwiązania 😕",
   "foundSolutions_one": "Znalazłem {{count}} rozwiązanie! 🎉",
   "foundSolutions_few": "Znalazłem {{count}} rozwiązania! 🎉",
-  "foundSolutions_one": "Znalazłem {{count}} rozwiązanie! 🎉",
+
   "foundSolutions_other": "Znalazłem {{count}} rozwiązań! 🎉",
   "foundSolutionsLoading_one": "foundSolutionsLoading_one",
-  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
+  "foundSolutionsLoading_other": "Ładowanie rozwiązań...",
   "sourceCode": "Kod źródłowy na GitHub",
   "language": "Język"
 }

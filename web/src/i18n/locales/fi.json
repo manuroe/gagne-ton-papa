@@ -8,7 +8,7 @@
   "foundSolutions_one": "Löysin {{count}} ratkaisun! 🎉",
   "foundSolutions_other": "Löysin {{count}} ratkaisua! 🎉",
   "foundSolutionsLoading_one": "foundSolutionsLoading_one",
-  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
+  "foundSolutionsLoading_other": "Etsin ratkaisuja... 🎉",
   "sourceCode": "Lähdekoodi GitHubissa",
   "language": "Kieli"
 }

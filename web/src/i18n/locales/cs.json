@@ -7,10 +7,10 @@
   "thinking": "Přemýšlím... 🤔",
   "noSolution": "Řešení nebylo nalezeno 😕",
   "foundSolutions_one": "Našel jsem {{count}} řešení! 🎉",
-  "foundSolutions_one": "Našel jsem {{count}} řešení! 🎉",
+
   "foundSolutions_other": "Našel jsem {{count}} řešení! 🎉",
   "foundSolutionsLoading_one": "foundSolutionsLoading_one",
-  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
+  "foundSolutionsLoading_other": "Načítám řešení...",
   "sourceCode": "Zdrojový kód na GitHub",
   "language": "Jazyk"
 }

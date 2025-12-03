@@ -8,7 +8,7 @@
   "foundSolutions_one": "Ich habe {{count}} Lösung gefunden! 🎉",
   "foundSolutions_other": "Ich habe {{count}} Lösungen gefunden! 🎉",
   "foundSolutionsLoading_one": "foundSolutionsLoading_one",
-  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
+  "foundSolutionsLoading_other": "Ich suche nach Lösungen... ⏳",
   "sourceCode": "Quellcode auf GitHub",
   "language": "Sprache"
 }

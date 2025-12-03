@@ -8,7 +8,7 @@
   "foundSolutions_one": "Jeg fant {{count}} løsning! 🎉",
   "foundSolutions_other": "Jeg fant {{count}} løsninger! 🎉",
   "foundSolutionsLoading_one": "foundSolutionsLoading_one",
-  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
+  "foundSolutionsLoading_other": "Laster inn løsninger...",
   "sourceCode": "Kildekode på GitHub",
   "language": "Språk"
 }

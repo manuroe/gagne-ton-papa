@@ -7,8 +7,8 @@
   "noSolution": "Не е намерено решение 😕",
   "foundSolutions_one": "Намерих {{count}} решение! 🎉",
   "foundSolutions_other": "Намерих {{count}} решения! 🎉",
-  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
-  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
+  "foundSolutionsLoading_one": "Зареждам {{count}} решение...",
+  "foundSolutionsLoading_other": "Зареждам {{count}} решения...",
   "sourceCode": "Изходен код в GitHub",
   "language": "Език"
 }
