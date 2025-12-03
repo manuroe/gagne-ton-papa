@@ -13,7 +13,7 @@
   "foundSolutions_one": "وجدت حلاً واحداً! 🎉",
   "foundSolutions_two": "وجدت حلين! 🎉",
   "foundSolutions_few": "وجدت {{count}} حلول! 🎉",
-
+  "foundSolutions_many": "وجدت {{count}} حلاً! 🎉",
   "foundSolutions_other": "لقد وجدت {{count}} حلول! 🎉",
   "foundSolutionsLoading_one": "وجدت {{count}} حل وما زلت أفكر... 🤔",
   "foundSolutionsLoading_other": "جاري تحميل الحلول...",
