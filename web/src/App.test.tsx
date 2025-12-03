@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { it, expect } from 'vitest';
 import App from './App';
 import './i18n/i18n';
 

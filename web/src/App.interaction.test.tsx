@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { vi } from 'vitest'
+import { vi, it, expect } from 'vitest'
 import './i18n/i18n'
 
 vi.mock('lib-wasm', () => {
@@ -28,7 +28,7 @@ vi.mock('lib-wasm', () => {
 import App from './App'
 
 it('shows missing cells after selecting a piece', async () => {
-  const { JSGame } = await import('lib-wasm') as any
+  const { JSGame } = require('lib-wasm')
   const allPiecesGame = JSGame.game_with_all_pieces()
 
   render(<App allPiecesGame={allPiecesGame} />)
