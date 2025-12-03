@@ -11,7 +11,7 @@
   "foundSolutions_few": "Znalazłem {{count}} rozwiązania! 🎉",
 
   "foundSolutions_other": "Znalazłem {{count}} rozwiązań! 🎉",
-  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_one": "Znalazłem {{count}} rozwiązanie i wciąż myślę... 🤔",
   "foundSolutionsLoading_other": "Ładowanie rozwiązań...",
   "sourceCode": "Kod źródłowy na GitHub",
   "language": "Język"

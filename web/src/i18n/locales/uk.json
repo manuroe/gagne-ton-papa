@@ -10,8 +10,8 @@
   "foundSolutions_one": "Я знайшов {{count}} рішення! 🎉",
   "foundSolutions_few": "Знайшов {{count}} рішення! 🎉",
   "foundSolutions_other": "Я знайшов {{count}} рішень! 🎉",
-  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
-  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
+  "foundSolutionsLoading_one": "Я знайшов {{count}} рішення і все ще думаю... 🤔",
+  "foundSolutionsLoading_other": "Я знайшов {{count}} рішень і все ще думаю... 🤔",
   "sourceCode": "Вихідний код на GitHub",
   "language": "Мова"
 }

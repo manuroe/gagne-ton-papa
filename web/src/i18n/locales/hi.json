@@ -7,7 +7,7 @@
   "noSolution": "कोई समाधान नहीं मिला 😕",
   "foundSolutions_one": "मुझे {{count}} समाधान मिला! 🎉",
   "foundSolutions_other": "मुझे {{count}} समाधान मिले! 🎉",
-  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_one": "मुझे {{count}} समाधान मिला और मैं अभी भी सोच रहा हूं... 🤔",
   "foundSolutionsLoading_other": "{{count}} समाधान लोड हो रहे हैं...",
   "sourceCode": "GitHub पर स्रोत कोड",
   "language": "भाषा"

@@ -7,7 +7,7 @@
   "noSolution": "Geen oplossing gevonden 😕",
   "foundSolutions_one": "Ik heb {{count}} oplossing gevonden! 🎉",
   "foundSolutions_other": "Ik heb {{count}} oplossingen gevonden! 🎉",
-  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_one": "Ik heb {{count}} oplossing gevonden en denk nog na... 🤔",
   "foundSolutionsLoading_other": "Ik ben {{count}} oplossingen aan het berekenen...",
   "sourceCode": "Broncode op GitHub",
   "language": "Taal"

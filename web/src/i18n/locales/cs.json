@@ -9,7 +9,7 @@
   "foundSolutions_one": "Našel jsem {{count}} řešení! 🎉",
 
   "foundSolutions_other": "Našel jsem {{count}} řešení! 🎉",
-  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_one": "Našel jsem {{count}} řešení a stále přemýšlím... 🤔",
   "foundSolutionsLoading_other": "Načítám řešení...",
   "sourceCode": "Zdrojový kód na GitHub",
   "language": "Jazyk"
