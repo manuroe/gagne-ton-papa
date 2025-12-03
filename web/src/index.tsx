@@ -6,11 +6,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import init, * as gtpLib from 'lib-wasm';
+// Import the WASM file as a Vite asset - Vite will handle the path automatically
+import wasmUrl from 'lib-wasm/lib_wasm_bg.wasm?url';
 
-// Ensure WASM loads correctly on GitHub Pages by providing explicit path
-const wasmPath = `${process.env.PUBLIC_URL}/lib_wasm_bg.wasm`;
-
-init(wasmPath).then(() => {
+init(wasmUrl).then(() => {
   const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
   );

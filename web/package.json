@@ -31,7 +31,6 @@
     "vitest": "^1.6.0"
   },
   "scripts": {
-    "wasm:sync": "cp ../lib-wasm/pkg/lib_wasm_bg.wasm public/lib_wasm_bg.wasm || true",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
