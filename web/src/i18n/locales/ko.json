@@ -5,6 +5,8 @@
   "thinking": "생각 중... 🤔",
   "noSolution": "해결책을 찾지 못했습니다 😕",
   "foundSolutions_other": "{{count}}개의 해결책을 찾았습니다! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "GitHub의 소스 코드",
   "language": "언어"
 }

@@ -7,8 +7,10 @@
   "thinking": "Mă gândesc... 🤔",
   "noSolution": "Nu am găsit nicio soluție 😕",
   "foundSolutions_one": "Am găsit {{count}} soluție! 🎉",
-  "foundSolutions_few": "Am găsit {{count}} soluții! 🎉",
+  "foundSolutions_one": "Am găsit {{count}} soluție! 🎉",
   "foundSolutions_other": "Am găsit {{count}} soluții! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "Cod sursă pe GitHub",
-  "language": "Limbă"
+  "language": "Limba"
 }

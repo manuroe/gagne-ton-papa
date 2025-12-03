@@ -19,6 +19,9 @@ pub trait GameResolverTrait {
     
     /// Generates all unique variants (rotations and reflections) of a piece.
     fn piece_variants(&self, piece: &Piece) -> Vec<Piece>;
+
+    /// Returns a specific page of solutions using DFS search.
+    fn resolve_page(&self, game: &Game, page_index: usize, page_size: usize) -> Vec<DMatrix<u32>>;
 }
 
 /// A solver for the "Gagne Ton Papa" puzzle game.
@@ -103,6 +106,84 @@ impl GameResolverTrait for GameResolver {
                 matrix,
             })
             .collect()
+    }
+
+    fn resolve_page(&self, game: &Game, page_index: usize, page_size: usize) -> Vec<DMatrix<u32>> {
+        if page_size == 0 { return Vec::new(); }
+
+        let rows = usize::try_from(game.rows()).expect("Row count too large");
+        let cols = usize::try_from(game.columns).expect("Column count too large");
+        assert!(rows * cols <= 64, "Board size exceeds 64 cells (rows * cols = {}), which is the limit for the bitboard implementation.", rows * cols);
+        
+        if !game.is_valid() {
+            return Vec::new();
+        }
+
+        // Order pieces by decreasing cell count for stronger pruning
+        let mut ordered_indices: Vec<_> = (0..game.pieces.len()).collect();
+        ordered_indices.sort_by_key(|&i| std::cmp::Reverse(game.pieces[i].cells()));
+
+        // Precompute variants and placements for each ordered piece
+        let mut precomputed: Vec<Vec<(BitBoard, DMatrix<u32>)>> = Vec::with_capacity(ordered_indices.len());
+        for (order_pos, &piece_idx) in ordered_indices.iter().enumerate() {
+            let piece = &game.pieces[piece_idx];
+            let piece_id = u32::try_from(order_pos).expect("Too many pieces") + 1;
+            let color_with_id = piece.color | (piece_id << 24);
+            let piece_with_id = Piece {
+                matrix: piece.matrix.clone(),
+                color: color_with_id,
+                tui_color: piece.tui_color,
+            };
+            let mut list: Vec<(BitBoard, DMatrix<u32>)> = Vec::new();
+            for variant in self.piece_variants(&piece_with_id) {
+                list.extend(generate_positions(&variant, rows, cols));
+            }
+            list.sort_by_key(|(bits, _)| *bits);
+            precomputed.push(list);
+        }
+
+        let mut results: Vec<DMatrix<u32>> = Vec::new();
+        let start = page_index.saturating_mul(page_size);
+        let end = start.saturating_add(page_size);
+        let mut count = 0usize;
+
+        // DFS with pagination: skip first 'start' solutions, collect next 'page_size'
+        fn dfs(
+            depth: usize,
+            boards_bits: BitBoard,
+            boards_matrix: &DMatrix<u32>,
+            precomputed: &[Vec<(BitBoard, DMatrix<u32>)>],
+            results: &mut Vec<DMatrix<u32>>,
+            count: &mut usize,
+            start: usize,
+            end: usize,
+        ) -> bool {
+            if *count >= end {
+                return true; // stop early
+            }
+            if depth == precomputed.len() {
+                if *count >= start {
+                    results.push(boards_matrix.clone());
+                }
+                *count += 1;
+                return *count >= end;
+            }
+            for (placement_bits, placement_matrix) in &precomputed[depth] {
+                if boards_bits & *placement_bits == 0 {
+                    let new_bits = boards_bits | *placement_bits;
+                    let new_matrix = boards_matrix + placement_matrix;
+                    if dfs(depth + 1, new_bits, &new_matrix, precomputed, results, count, start, end) {
+                        return true;
+                    }
+                }
+            }
+            false
+        }
+
+        let empty_board_bits: BitBoard = 0;
+        let empty_board_matrix = DMatrix::<u32>::zeros(rows, cols);
+        dfs(0, empty_board_bits, &empty_board_matrix, &precomputed, &mut results, &mut count, start, end);
+        results
     }
 }
 

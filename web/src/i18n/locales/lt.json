@@ -9,6 +9,8 @@
   "foundSolutions_one": "Radau {{count}} sprendimą! 🎉",
   "foundSolutions_few": "Radau {{count}} sprendimus! 🎉",
   "foundSolutions_other": "Radau {{count}} sprendimų! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "Šaltinio kodas GitHub platformoje",
   "language": "Kalba"
 }

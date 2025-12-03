@@ -7,6 +7,8 @@
   "noSolution": "Lahendust ei leitud 😕",
   "foundSolutions_one": "Leidsin {{count}} lahenduse! 🎉",
   "foundSolutions_other": "Leidsin {{count}} lahendust! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "Lähtekood GitHubis",
   "language": "Keel"
 }

@@ -7,6 +7,8 @@
   "noSolution": "Ingen løsning funnet 😕",
   "foundSolutions_one": "Jeg fant {{count}} løsning! 🎉",
   "foundSolutions_other": "Jeg fant {{count}} løsninger! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "Kildekode på GitHub",
   "language": "Språk"
 }

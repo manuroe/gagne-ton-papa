@@ -52,8 +52,8 @@ describe("game solver", () => {
   bench('resolve_and_render_first_page', () => {
     const game = createTestGame();
     
-    // Result pagination is not yet implemented. This benchmark is about getting the initial metrics
-    const solutions = game.resolve();
+    // Get first page of solutions using pagination
+    const solutions = game.resolve_page(0, 20);
 
     // Accumulate total SVG length to ensure the SVG content is actually loaded
     // and not optimized away by the JavaScript engine

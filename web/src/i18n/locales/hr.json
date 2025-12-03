@@ -7,8 +7,10 @@
   "thinking": "Razmišljam... 🤔",
   "noSolution": "Rješenje nije pronađeno 😕",
   "foundSolutions_one": "Pronašao sam {{count}} rješenje! 🎉",
-  "foundSolutions_few": "Pronašao sam {{count}} rješenja! 🎉",
+  "foundSolutions_one": "Pronašao sam {{count}} rješenje! 🎉",
   "foundSolutions_other": "Pronašao sam {{count}} rješenja! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "Izvorni kod na GitHubu",
   "language": "Jezik"
 }

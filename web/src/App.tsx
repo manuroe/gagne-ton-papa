@@ -21,6 +21,8 @@ type AppState = {
   missingCells: number,
   searching: boolean,
   solutions?: gtpLib.JSMatrix[],
+  totalSolutionsFound: number,
+  isLoadingMore: boolean,
 }
 
 class AppInner extends React.Component<AppInnerProps, AppState> {
@@ -30,6 +32,10 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
   }
 
+  // Abort token to cancel background solution loading when selection changes or is cleared
+  private currentLoadToken: number = 0;
+
+
   state: AppState = {
     allPieces: this.props.allPiecesGame.pieces,
     selectedPieceIds: new Set<number>(),
@@ -37,6 +43,8 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     isGameValid: false,
     missingCells: 0,
     searching: false,
+    totalSolutionsFound: 0,
+    isLoadingMore: false,
   };
 
   calculateTotalCells(selectedPieceIds: Set<number>): number {
@@ -91,13 +99,17 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
 
   setSelectedPieceIds(selectedPieceIds: Set<number>, closingPieceIds: Set<number> = this.state.closingPieceIds) {
     if (selectedPieceIds.size === 0) {
+      // Cancel any ongoing progressive loading
+      this.currentLoadToken++;
       this.setState({
         selectedPieceIds: selectedPieceIds,
         closingPieceIds: closingPieceIds,
         isGameValid: false,
         missingCells: 0,
         searching: false,
-        solutions: undefined
+        solutions: undefined,
+        totalSolutionsFound: 0,
+        isLoadingMore: false,
       });
       return;
     }
@@ -111,35 +123,21 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
       isGameValid: isGameValid,
       searching: false,
       missingCells: 0,
-      solutions: undefined
+      solutions: undefined,
+      totalSolutionsFound: 0,
+      isLoadingMore: false,
     });
 
-    const MIN_SEARCH_DISPLAY_MS = 1000;
-
     if (isGameValid) {
-      const searchStartTime = Date.now();
-
+      // Begin a new progressive load cycle; invalidate previous ones
+      this.currentLoadToken++;
+      const loadToken = this.currentLoadToken;
       this.setState({
-        searching: true
+        searching: true,
+        isLoadingMore: true,
       }, () => {
-        // Use setTimeout to allow the UI to render the "searching" state
-        // before the heavy computation blocks the main thread.
-        setTimeout(() => {
-          // Start computation immediately
-          let solutions = game.resolve();
-
-          // Calculate how long the computation took
-          const searchDuration = Date.now() - searchStartTime;
-          const remainingDisplayTime = Math.max(0, MIN_SEARCH_DISPLAY_MS - searchDuration);
-
-          // Ensure the "searching" message is visible for at least MIN_SEARCH_DISPLAY_MS
-          setTimeout(() => {
-            this.setState({
-              searching: false,
-              solutions: solutions
-            });
-          }, remainingDisplayTime);
-        }, 0);
+        // Load all solutions progressively
+        this.loadAllSolutionsProgressively(game, loadToken);
       });
     }
     else {
@@ -151,6 +149,54 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
 
   resetSelection = () => {
     this.setSelectedPieceIds(new Set<number>(), new Set<number>());
+  }
+
+  loadAllSolutionsProgressively = (game: gtpLib.JSGame, loadToken: number) => {
+    const pageSize = 20;
+    let currentPage = 0;
+    let allSolutions: gtpLib.JSMatrix[] = [];
+
+    const loadNextBatch = () => {
+      setTimeout(() => {
+        // Abort if a new loading cycle started
+        if (loadToken !== this.currentLoadToken) {
+          return;
+        }
+        const newSolutions = game.resolve_page(currentPage, pageSize);
+        
+        if (newSolutions.length > 0) {
+          allSolutions = [...allSolutions, ...newSolutions];
+          this.setState({
+            solutions: allSolutions,
+            totalSolutionsFound: allSolutions.length,
+            searching: true,
+            isLoadingMore: true,
+          });
+
+          if (newSolutions.length === pageSize) {
+            // More solutions might exist, load next batch
+            currentPage++;
+            loadNextBatch();
+          } else {
+            // Last batch loaded
+            this.setState({
+              searching: false,
+              isLoadingMore: false,
+            });
+          }
+        } else {
+          // No more solutions; if none found at all, set empty array so UI can show "noSolution"
+          this.setState({
+            solutions: allSolutions,
+            totalSolutionsFound: allSolutions.length,
+            searching: false,
+            isLoadingMore: false,
+          });
+        }
+      }, 0);
+    };
+
+    loadNextBatch();
   }
 
 
@@ -223,13 +269,12 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
       )
     }
 
-    if (this.state.searching) {
+    if (this.state.searching && this.state.totalSolutionsFound === 0) {
       return (
         <div id='solutions-area'>
           <div className='solution-count'>
             {t('thinking')}
           </div>
-          <div className="spinner"></div>
         </div>
       )
     }
@@ -238,7 +283,7 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
       return (<div></div>);
     }
 
-    if (this.state.solutions.length === 0) {
+    if (this.state.solutions.length === 0 && !this.state.isLoadingMore) {
       return (
         <div id='solutions-area'>
           <div className='solution-count'>
@@ -251,7 +296,9 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
     return (
       <div id='solutions-area'>
         <div className='solution-count'>
-          {t('foundSolutions', { count: this.state.solutions.length })}
+          {this.state.isLoadingMore 
+            ? t('foundSolutionsLoading', { count: this.state.totalSolutionsFound })
+            : t('foundSolutions', { count: this.state.solutions.length })}
         </div>
         <div className='solutions-grid'>
           {this.state.solutions.map((solution, index) => {

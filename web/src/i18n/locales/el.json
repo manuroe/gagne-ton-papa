@@ -7,6 +7,8 @@
   "noSolution": "Δεν βρέθηκε λύση 😕",
   "foundSolutions_one": "Βρήκα {{count}} λύση! 🎉",
   "foundSolutions_other": "Βρήκα {{count}} λύσεις! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "Πηγαίος κώδικας στο GitHub",
   "language": "Γλώσσα"
 }

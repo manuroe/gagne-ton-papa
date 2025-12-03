@@ -13,8 +13,10 @@
   "foundSolutions_one": "وجدت حلاً واحداً! 🎉",
   "foundSolutions_two": "وجدت حلين! 🎉",
   "foundSolutions_few": "وجدت {{count}} حلول! 🎉",
-  "foundSolutions_many": "وجدت {{count}} حلاً! 🎉",
-  "foundSolutions_other": "وجدت {{count}} حل! 🎉",
+  "foundSolutions_one": "لقد وجدت {{count}} حلاً! 🎉",
+  "foundSolutions_other": "لقد وجدت {{count}} حلول! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "الكود المصدري على GitHub",
   "language": "اللغة"
 }

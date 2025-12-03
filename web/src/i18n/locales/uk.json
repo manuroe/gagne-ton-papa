@@ -9,8 +9,10 @@
   "noSolution": "Рішення не знайдено 😕",
   "foundSolutions_one": "Знайшов {{count}} рішення! 🎉",
   "foundSolutions_few": "Знайшов {{count}} рішення! 🎉",
-  "foundSolutions_many": "Знайшов {{count}} рішень! 🎉",
-  "foundSolutions_other": "Знайшов {{count}} рішень! 🎉",
+  "foundSolutions_one": "Я знайшов {{count}} рішення! 🎉",
+  "foundSolutions_other": "Я знайшов {{count}} рішень! 🎉",
+  "foundSolutionsLoading_one": "foundSolutionsLoading_one",
+  "foundSolutionsLoading_other": "foundSolutionsLoading_other",
   "sourceCode": "Вихідний код на GitHub",
   "language": "Мова"
 }
