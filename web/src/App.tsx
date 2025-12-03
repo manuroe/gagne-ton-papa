@@ -165,9 +165,9 @@ class AppInner extends React.Component<AppInnerProps, AppState> {
         const newSolutions = game.resolve_page(currentPage, pageSize);
         
         if (newSolutions.length > 0) {
-          allSolutions = [...allSolutions, ...newSolutions];
+          allSolutions.push(...newSolutions);
           this.setState({
-            solutions: allSolutions,
+            solutions: [...allSolutions],
             totalSolutionsFound: allSolutions.length,
             searching: true,
             isLoadingMore: true,
